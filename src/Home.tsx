@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Constant from "./utils/Constant";
+import AppLayout from "./layout";
 const URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&channelId=UCw4izi2fsJzFltt3EbmokWA&type=video&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`;
 
 interface Video {
@@ -54,35 +55,7 @@ const Home = () => {
   };
   return (
     <div>
-      Home
-      {videoList &&
-        videoList.slice(0, 20).map((video) => {
-          const {
-            id,
-            title,
-            channelTitle,
-            description,
-            publishedAt,
-            thumbnails,
-          } = video;
-          return (
-            <div>{<img src={thumbnails.medium.url} alt="thumbnail" />}</div>
-            // <div key={title}>
-            //   {/* <p>{title}</p> */}
-            //   {/* <img src={thumbnails.medium.url} alt="" /> */}
-            //   <iframe
-            //     id={id}
-            //     title={title}
-            //     // type="text/html"
-            //     width="720"
-            //     height="405"
-            //     src={`https://www.youtube.com/embed/${id}`}
-            //     // frameborder="0"
-            //     // allowfullscreen
-            //   ></iframe>
-            // </div>
-          );
-        })}
+      {/* {videoList && videoList.map((video) => <AContent video={video} />)} */}
     </div>
   );
 };

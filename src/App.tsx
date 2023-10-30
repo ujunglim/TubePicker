@@ -1,7 +1,7 @@
-import Home from "./Home";
+import AppLayout from "./layout";
 
 function App() {
-  return <Home />;
+  return <AppLayout></AppLayout>;
 }
 
 export default App;
