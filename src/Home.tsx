@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Constant from "./utils/Constant";
-import AppLayout from "./layout";
+import VideoContent from "./Component/VideoContent";
+import "./index.less";
 const URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&channelId=UCw4izi2fsJzFltt3EbmokWA&type=video&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`;
 
 interface Video {
@@ -54,8 +55,8 @@ const Home = () => {
     localStorage.setItem(Constant.DATA_NAME, JSON.stringify(videoList));
   };
   return (
-    <div>
-      {/* {videoList && videoList.map((video) => <AContent video={video} />)} */}
+    <div className="video_list">
+      {videoList && videoList.map((video) => <VideoContent video={video} />)}
     </div>
   );
 };

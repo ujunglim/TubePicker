@@ -1,12 +1,13 @@
 import Header from "./Header";
 import SideBar from "./SideBar";
 import Main from "./Main";
+import "./index.less";
 
 const AppLayout = () => {
   return (
-    <div>
+    <div className="layout">
       <Header />
-      <div>
+      <div className={"body"}>
         <SideBar />
         <Main />
       </div>

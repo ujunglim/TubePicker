@@ -1,7 +1,7 @@
-import React from "react";
+import "./index.less";
 
 const SideBar = () => {
-  return <div>SideBar</div>;
+  return <div className="sidebar">SideBar</div>;
 };
 
 export default SideBar;

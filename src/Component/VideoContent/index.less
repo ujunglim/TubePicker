@@ -1,0 +1,38 @@
+.video_content_box {
+  display: flex;
+  flex-flow: column;
+  color: black;
+
+  .video_img {
+    position: relative;
+  }
+
+  .video_img::before,
+  .video_img::after {
+    content: '';
+    height: 1.5rem;
+    background-color: black;
+    position: absolute;
+    left: 0;
+    right: 0;
+  }
+
+  .video_img::before {
+    top: -1.5rem;
+  }
+
+  .video_img::after {
+    bottom: -1.5rem;
+  }
+
+  .title {
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    color: grey;
+    margin: 0px;
+  }
+}
