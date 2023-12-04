@@ -1,10 +1,25 @@
+import { Video } from "../../types";
 import "./index.less";
+import React, { FC, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+interface props {
+  video: Video;
+}
 
-const VideoContent = ({ video }: any) => {
+const VideoContent: FC<props> = ({ video }) => {
   const { id, title, channelTitle, description, publishedAt, thumbnails } =
     video;
+  const navigate = useNavigate();
+
+  const handleClick = useCallback(
+    (videoId: string) => {
+      navigate(`/watch/${videoId}`);
+    },
+    [navigate]
+  );
+
   return (
-    <div key={title} className="video_content_box">
+    <div key={id} className="video_content_box" onClick={() => handleClick(id)}>
       <div className="video_img">
         <img src={thumbnails.medium.url} alt="thumbnail" />
       </div>

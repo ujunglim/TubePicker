@@ -3,22 +3,8 @@ import { useState, useEffect } from "react";
 import Constant from "./utils/Constant";
 import VideoContent from "./Component/VideoContent";
 import "./index.less";
+import { Video } from "./types";
 const URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&channelId=UCw4izi2fsJzFltt3EbmokWA&type=video&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`;
-
-interface Video {
-  id: string;
-  title: string;
-  channelTitle: string;
-  description: string;
-  publishedAt: string;
-  thumbnails: {
-    medium: {
-      url: string;
-      height: number;
-      width: number;
-    };
-  };
-}
 
 const Home = () => {
   const [videoList, setVideoList] = useState<Video[]>();
