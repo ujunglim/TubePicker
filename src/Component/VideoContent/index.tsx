@@ -4,12 +4,9 @@ const VideoContent = ({ video }: any) => {
   const { id, title, channelTitle, description, publishedAt, thumbnails } =
     video;
   return (
-    // <div>{<img src={thumbnails.medium.url} alt="thumbnail" />}</div>
     <div key={title} className="video_content_box">
       <div className="video_img">
-        {/* <div className="video_img_top"></div> */}
-        <img src={thumbnails.medium.url} alt="썸네일이미지" />
-        {/* <div className="video_img_top"></div> */}
+        <img src={thumbnails.medium.url} alt="thumbnail" />
       </div>
       <p className="title">{title}</p>
       <p className="subtitle">{channelTitle}</p>

@@ -7,7 +7,7 @@ const AppLayout = () => {
   return (
     <div className="layout">
       <Header />
-      <div className={"body"}>
+      <div className={"content"}>
         <SideBar />
         <Main />
       </div>
