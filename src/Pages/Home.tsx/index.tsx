@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import Constant from "./utils/Constant";
-import VideoContent from "./Component/VideoContent";
+import Constant from "../../utils/Constant";
+import VideoContent from "../../Component/VideoContent";
 import "./index.less";
-import { Video } from "./types";
+import { Video } from "../../types";
 const URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&channelId=UCw4izi2fsJzFltt3EbmokWA&type=video&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`;
 
 const Home = () => {

@@ -1,15 +1,19 @@
 import Header from "./Header";
 import SideBar from "./SideBar";
-import Main from "./Main";
 import "./index.less";
+import { FC } from "react";
 
-const AppLayout = () => {
+interface prop {
+  children: any;
+}
+
+const AppLayout: FC<prop> = ({ children }) => {
   return (
     <div className="layout">
       <Header />
       <div className={"content"}>
         <SideBar />
-        <Main />
+        <div className="main">{children}</div>
       </div>
     </div>
   );
