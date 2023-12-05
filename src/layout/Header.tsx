@@ -1,7 +1,20 @@
+import { useNavigate } from "react-router";
 import "./index.less";
 
 const Header = () => {
-  return <div className={"header"}>Header</div>;
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/");
+  };
+
+  return (
+    <div className={"header"}>
+      <h1 className="home_button" onClick={handleClick}>
+        🍒TubePicker
+      </h1>
+    </div>
+  );
 };
 
 export default Header;

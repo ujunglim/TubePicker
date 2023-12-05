@@ -18,7 +18,7 @@
   - [x] main 비디오리스트
   - [x] 반응형 처리
   - [x] header, sider 고정
-  - [] header 홈 버튼
+  - [x] header 홈 버튼
   - [x] 디폴트 레이아웃 안에 routes 넣기
 
 - 영상 보기
