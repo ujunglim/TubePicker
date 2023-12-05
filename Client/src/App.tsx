@@ -11,7 +11,7 @@ const clientId =
 function App() {
   useEffect(() => {
     const start = () => {
-      gapi.client.init({
+      gapi.auth2.init({
         clientId,
         scope: "",
       });
