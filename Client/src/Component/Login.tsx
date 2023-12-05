@@ -1,11 +1,14 @@
 import GoogleLogin from "react-google-login";
+import { useNavigate } from "react-router";
 
-const clientId =
-  "94751456728-the57pbcnud2pgto7gscjplb5ntik8ae.apps.googleusercontent.com";
+const clientId: string = process.env.REACT_APP_OAUTH_CLIENT_ID as string;
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const handleSuccess = (res: any) => {
-    console.log("successed!", res.profileObj);
+    localStorage.setItem("login", JSON.stringify(res.profileObj));
+    navigate("/home");
   };
 
   const handleFailure = (res: any) => {

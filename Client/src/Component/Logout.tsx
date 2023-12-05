@@ -1,11 +1,14 @@
 import { GoogleLogout } from "react-google-login";
+import { useNavigate } from "react-router";
 
-const clientId =
-  "94751456728-the57pbcnud2pgto7gscjplb5ntik8ae.apps.googleusercontent.com";
+const clientId: string = process.env.REACT_APP_OAUTH_CLIENT_ID as string;
 
 const Logout = () => {
+  const navigate = useNavigate();
+
   const handleSuccess = () => {
-    console.log("log out successful");
+    localStorage.removeItem("login");
+    navigate("/");
   };
 
   return (
