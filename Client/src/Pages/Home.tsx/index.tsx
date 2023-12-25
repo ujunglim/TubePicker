@@ -8,10 +8,16 @@ const URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResult
 
 const Home = () => {
   const [videoList, setVideoList] = useState<Video[]>();
+  const [playlists, setPlaylists] = useState<any[]>([]);
 
   useEffect(() => {
     getVideos();
   }, []);
+
+  const getPlaylist = async () => {
+    const response = await axios.post("http://localhost:9090/api/plalist");
+    setPlaylists(response.data);
+  };
 
   const getVideos = async () => {
     const localData = localStorage.getItem(Constant.DATA_NAME);
@@ -42,6 +48,13 @@ const Home = () => {
   };
   return (
     <div className="video_list">
+      <button onClick={getPlaylist}>get playlist</button>
+      <h2>Playlists</h2>
+      <ul>
+        {playlists.map((playlist) => (
+          <li key={playlist.id}>{playlist.title}</li>
+        ))}
+      </ul>
       {videoList && videoList.map((video) => <VideoContent video={video} />)}
     </div>
   );

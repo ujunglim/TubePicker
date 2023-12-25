@@ -1,22 +1,21 @@
-import React, { useEffect } from "react";
-import Login from "../../Component/Login";
-import { gapi } from "gapi-script";
+import axios from "axios";
 
 const Landing = () => {
-  useEffect(() => {
-    const start = () => {
-      gapi.auth2.init({
-        clientId: process.env.REACT_APP_OAUTH_CLIENT_ID,
-        scope: "",
-      });
-    };
-
-    gapi.load("client:auth2", start);
-  }, []);
+  const handleClick = async () => {
+    const response = await axios.post(
+      "http://localhost:9090/google/get_login_url"
+    );
+    console.log(
+      "responses from http://localhost:9090/google/get_login_url",
+      response.data
+    );
+    const { auth2Url } = response.data;
+    window.location.href = auth2Url;
+  };
 
   return (
     <div>
-      <Login />
+      <button onClick={handleClick}>Login with Google</button>
     </div>
   );
 };
