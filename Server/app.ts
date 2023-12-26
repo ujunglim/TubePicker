@@ -48,6 +48,16 @@ app.post("/api/plalist", async function (req, res) {
   }
 });
 
+app.get('/api/likedlist', async (req, res) => {
+  try{
+    const likedlist = await googleAuthClientInstance.getUserLikedList();
+    res.json({likedlist});
+  } catch (error) {
+    console.error("Error retrieving video information:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+})
+
 app.listen(PORT, () => {
   console.log(`Listening on ${PORT}`);
 });

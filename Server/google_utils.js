@@ -57,7 +57,36 @@ class GoogleAuthClient {
     });
     return playlists;
   }
+
+  async getUserLikedList() {
+    const response = await this.youtube.playlistItems.list({
+      part: "snippet",
+      maxResults: 50,
+      playlistId: "LL", // "LL"은 유저가 "좋아요"한 동영상의 Playlist ID
+    });
+
+    const likedVideos = response.data.items.map((item) => {
+      const {
+        title,
+        resourceId: { videoId },
+        publishedAt,
+        description,
+        thumbnails,
+        videoOwnerChannelTitle,
+        videoOwnerChannelId,
+      } = item.snippet;
+
+      return {
+        id: videoId,
+        title,
+        channelTitle: videoOwnerChannelTitle,
+        description,
+        publishedAt,
+        thumbnails,
+      };
+    });
+    return likedVideos;
+  }
 }
 
-// TODO: Export as class instead of singleton, every session should have its own googleAuthClient instance
 module.exports = GoogleAuthClient;

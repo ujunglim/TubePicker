@@ -9,6 +9,7 @@ const URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResult
 const Home = () => {
   const [videoList, setVideoList] = useState<Video[]>();
   const [playlists, setPlaylists] = useState<any[]>([]);
+  const [likedList, setLikedList] = useState<Video[]>();
 
   useEffect(() => {
     getVideos();
@@ -17,6 +18,11 @@ const Home = () => {
   const getPlaylist = async () => {
     const response = await axios.post("http://localhost:9090/api/plalist");
     setPlaylists(response.data);
+  };
+
+  const getLikedList = async () => {
+    const response = await axios.get("http://localhost:9090/api/likedlist");
+    setLikedList(response.data.likedlist);
   };
 
   const getVideos = async () => {
@@ -49,12 +55,17 @@ const Home = () => {
   return (
     <div className="video_list">
       <button onClick={getPlaylist}>get playlist</button>
+      <button onClick={getLikedList}> get LikedList</button>
       <h2>Playlists</h2>
       <ul>
         {playlists.map((playlist) => (
           <li key={playlist.id}>{playlist.title}</li>
         ))}
       </ul>
+      {likedList &&
+        likedList.map((video: Video) => {
+          return <VideoContent video={video} key={video.id} />;
+        })}
       {videoList && videoList.map((video) => <VideoContent video={video} />)}
     </div>
   );

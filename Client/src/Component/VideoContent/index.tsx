@@ -21,7 +21,7 @@ const VideoContent: FC<props> = ({ video }) => {
   return (
     <div key={id} className="video_content_box" onClick={() => handleClick(id)}>
       <div className="video_img">
-        <img src={thumbnails.medium.url} alt="thumbnail" />
+        <img src={thumbnails?.medium?.url} alt="thumbnail" />
       </div>
       <p className="title">{title}</p>
       <p className="subtitle">{channelTitle}</p>
