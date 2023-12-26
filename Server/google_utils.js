@@ -3,7 +3,7 @@ const { google } = require("googleapis");
 const oauthClientJson = fs.readFileSync("oauth_client.json", "utf8");
 const oauthClient = JSON.parse(oauthClientJson);
 
-class GoogleAuthCLient {
+class GoogleAuthClient {
   constructor() {
     this._initClient();
   }
@@ -55,11 +55,9 @@ class GoogleAuthCLient {
         id: playlist.id,
       };
     });
-
     return playlists;
   }
 }
 
-var googleAuthClient = new GoogleAuthCLient();
 // TODO: Export as class instead of singleton, every session should have its own googleAuthClient instance
-module.exports = { googleAuthClient }; // for testing only
+module.exports = GoogleAuthClient;
