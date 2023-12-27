@@ -1,22 +1,24 @@
 import { Video } from "../../types";
 import calcTimeDiff from "../../utils/calcTimeDiff";
 import "./index.less";
-import React, { FC, useCallback } from "react";
+import { FC, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-interface props {
+interface Props {
   video: Video;
+  setSelectedVideoId: (id: string) => void;
 }
 
-const VideoContent: FC<props> = ({ video }) => {
+const VideoContent: FC<Props> = ({ video, setSelectedVideoId }) => {
   const { id, title, channelTitle, description, publishedAt, thumbnails } =
     video;
   const navigate = useNavigate();
 
   const handleClick = useCallback(
     (videoId: string) => {
-      navigate(`/watch/${videoId}`);
+      // navigate(`/watch/${videoId}`);
+      setSelectedVideoId(videoId);
     },
-    [navigate]
+    [setSelectedVideoId]
   );
 
   return (
