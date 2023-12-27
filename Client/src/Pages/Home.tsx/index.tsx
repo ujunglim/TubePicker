@@ -79,7 +79,7 @@ const Home = () => {
           })}
         {/* {videoList && videoList.map((video) => <VideoContent video={video} />)} */}
       </div>
-      {selectedVideo && modalPosition && (
+      {selectedVideo && modalPosition !== undefined && (
         <ModalVideo selectedVideo={selectedVideo} />
       )}
     </>
