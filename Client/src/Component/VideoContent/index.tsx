@@ -1,4 +1,5 @@
 import { Video } from "../../types";
+import calcTimeDiff from "../../utils/calcTimeDiff";
 import "./index.less";
 import React, { FC, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +26,7 @@ const VideoContent: FC<props> = ({ video }) => {
       </div>
       <p className="title">{title}</p>
       <p className="subtitle">{channelTitle}</p>
-      <p className="subtitle">{"날짜"}</p>
+      <p className="subtitle">{calcTimeDiff(publishedAt)}</p>
       {/* <iframe
         id={id}
         title={title}
