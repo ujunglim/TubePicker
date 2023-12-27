@@ -14,10 +14,11 @@ const Home = () => {
   const [playlists, setPlaylists] = useState<any[]>([]);
   const [likedList, setLikedList] = useState<Video[]>();
   const [selectedVideo, setSelectedVideo] = useState<null | Video>(null);
-  const { isMaskOn } = useSelector(appManage);
+  const { modalPosition } = useSelector(appManage);
 
   useEffect(() => {
-    getVideos();
+    // getVideos();
+    getLikedList();
   }, []);
 
   const getPlaylist = async () => {
@@ -30,44 +31,42 @@ const Home = () => {
     setLikedList(response.data.likedlist);
   };
 
-  const getVideos = async () => {
-    const localData = localStorage.getItem(Constant.DATA_NAME);
-    if (localData) {
-      setVideoList(JSON.parse(localData));
-      return;
-    }
+  // const getVideos = async () => {
+  //   const localData = localStorage.getItem(Constant.DATA_NAME);
+  //   if (localData) {
+  //     setVideoList(JSON.parse(localData));
+  //     return;
+  //   }
 
-    const {
-      data: { items },
-    } = await axios.get(URL);
-    const videoList = items.map((item: any) => {
-      const id = item.id.videoId;
-      const { title, channelTitle, description, publishedAt, thumbnails } =
-        item.snippet;
+  //   const {
+  //     data: { items },
+  //   } = await axios.get(URL);
+  //   const videoList = items.map((item: any) => {
+  //     const id = item.id.videoId;
+  //     const { title, channelTitle, description, publishedAt, thumbnails } =
+  //       item.snippet;
 
-      return {
-        id,
-        title,
-        channelTitle,
-        description,
-        publishedAt,
-        thumbnails,
-      };
-    });
-    setVideoList(videoList);
-    localStorage.setItem(Constant.DATA_NAME, JSON.stringify(videoList));
-  };
+  //     return {
+  //       id,
+  //       title,
+  //       channelTitle,
+  //       description,
+  //       publishedAt,
+  //       thumbnails,
+  //     };
+  //   });
+  //   setVideoList(videoList);
+  //   localStorage.setItem(Constant.DATA_NAME, JSON.stringify(videoList));
+  // };
   return (
     <>
       <div className="video_list">
-        <button onClick={getPlaylist}>get playlist</button>
-        <button onClick={getLikedList}> get LikedList</button>
-        <h2>Playlists</h2>
-        <ul>
+        {/* <button onClick={getPlaylist}>get playlist</button> */}
+        {/* <ul>
           {playlists.map((playlist) => (
             <li key={playlist.id}>{playlist.title}</li>
           ))}
-        </ul>
+        </ul> */}
         {likedList &&
           likedList.map((video: Video) => {
             return (
@@ -80,7 +79,7 @@ const Home = () => {
           })}
         {/* {videoList && videoList.map((video) => <VideoContent video={video} />)} */}
       </div>
-      {selectedVideo && isMaskOn && (
+      {selectedVideo && modalPosition && (
         <ModalVideo selectedVideo={selectedVideo} />
       )}
     </>

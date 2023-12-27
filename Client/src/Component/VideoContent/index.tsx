@@ -3,7 +3,7 @@ import calcTimeDiff from "../../utils/calcTimeDiff";
 import "./index.less";
 import { FC, useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { setIsMaskOn } from "../../store/slices/app";
+import { setModalPosition } from "../../store/slices/app";
 interface Props {
   video: Video;
   setSelectedVideo: (video: Video) => void;
@@ -14,13 +14,17 @@ const VideoContent: FC<Props> = ({ video, setSelectedVideo }) => {
     video;
   const dispatch = useDispatch();
 
-  const handleClick = useCallback(() => {
+  const openModal = useCallback(() => {
+    const scrollPos = window.scrollY;
+    dispatch(setModalPosition(scrollPos));
+    document.body.style.position = "fixed"; // 스크롤바를 없애준다
+    document.body.style.top = `-${scrollPos}px`; // 기존위치를 고정한다
+    document.body.style.paddingRight = "17px"; // 화면의 흔들림을 커버해준다
     setSelectedVideo(video);
-    dispatch(setIsMaskOn(true));
   }, [dispatch, setSelectedVideo, video]);
 
   return (
-    <div key={id} className="video_content_box" onClick={handleClick}>
+    <div key={id} className="video_content_box" onClick={openModal}>
       <div className="video_img">
         <img src={thumbnails?.medium?.url} alt="thumbnail" />
       </div>
