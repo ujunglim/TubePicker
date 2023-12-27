@@ -1,16 +1,20 @@
+import { useSelector, useDispatch } from "react-redux";
 import Header from "./Header";
 import SideBar from "./SideBar";
 import "./index.less";
-import { FC, useState } from "react";
+import { FC } from "react";
+import { appManage, setIsMaskOn } from "../store/slices/app";
 
 interface prop {
   children: any;
 }
 
 const AppLayout: FC<prop> = ({ children }) => {
-  const [isMaskOn, setIsMaskOn] = useState<boolean>(true);
+  const { isMaskOn } = useSelector(appManage);
+  const dispatch = useDispatch();
+
   const handleMask = () => {
-    setIsMaskOn(false);
+    dispatch(setIsMaskOn(false));
   };
   return (
     <div className="layout">

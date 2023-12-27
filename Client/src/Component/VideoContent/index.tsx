@@ -2,7 +2,8 @@ import { Video } from "../../types";
 import calcTimeDiff from "../../utils/calcTimeDiff";
 import "./index.less";
 import { FC, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setIsMaskOn } from "../../store/slices/app";
 interface Props {
   video: Video;
   setSelectedVideoId: (id: string) => void;
@@ -11,14 +12,14 @@ interface Props {
 const VideoContent: FC<Props> = ({ video, setSelectedVideoId }) => {
   const { id, title, channelTitle, description, publishedAt, thumbnails } =
     video;
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleClick = useCallback(
     (videoId: string) => {
-      // navigate(`/watch/${videoId}`);
       setSelectedVideoId(videoId);
+      dispatch(setIsMaskOn(true));
     },
-    [setSelectedVideoId]
+    [dispatch, setSelectedVideoId]
   );
 
   return (

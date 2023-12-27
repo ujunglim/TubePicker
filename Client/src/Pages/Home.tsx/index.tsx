@@ -5,6 +5,8 @@ import VideoContent from "../../Component/VideoContent";
 import "./index.less";
 import { Video } from "../../types";
 import ModalVideo from "../../Component/ModalVideo";
+import { appManage } from "../../store/slices/app";
+import { useSelector } from "react-redux";
 const URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&channelId=UCw4izi2fsJzFltt3EbmokWA&type=video&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`;
 
 const Home = () => {
@@ -12,14 +14,11 @@ const Home = () => {
   const [playlists, setPlaylists] = useState<any[]>([]);
   const [likedList, setLikedList] = useState<Video[]>();
   const [selectedVideoId, setSelectedVideoId] = useState<null | string>(null);
+  const { isMaskOn } = useSelector(appManage);
 
   useEffect(() => {
     getVideos();
   }, []);
-
-  useEffect(() => {
-    console.log(selectedVideoId);
-  }, [selectedVideoId]);
 
   const getPlaylist = async () => {
     const response = await axios.post("http://localhost:9090/api/plalist");
@@ -81,7 +80,7 @@ const Home = () => {
           })}
         {/* {videoList && videoList.map((video) => <VideoContent video={video} />)} */}
       </div>
-      {selectedVideoId && <ModalVideo id={selectedVideoId} />}
+      {selectedVideoId && isMaskOn && <ModalVideo id={selectedVideoId} />}
     </>
   );
 };
