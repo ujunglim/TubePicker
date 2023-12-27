@@ -17,7 +17,7 @@ const AppLayout: FC<prop> = ({ children }) => {
     dispatch(setIsMaskOn(false));
   };
   return (
-    <div className="layout">
+    <div className="layout" style={{ overflow: isMaskOn ? "hidden" : "auto" }}>
       {isMaskOn && <div className="mask" onClick={handleMask}></div>}
       <Header />
       <div className={"content"}>

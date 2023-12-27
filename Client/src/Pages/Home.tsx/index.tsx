@@ -13,7 +13,7 @@ const Home = () => {
   const [videoList, setVideoList] = useState<Video[]>();
   const [playlists, setPlaylists] = useState<any[]>([]);
   const [likedList, setLikedList] = useState<Video[]>();
-  const [selectedVideoId, setSelectedVideoId] = useState<null | string>(null);
+  const [selectedVideo, setSelectedVideo] = useState<null | Video>(null);
   const { isMaskOn } = useSelector(appManage);
 
   useEffect(() => {
@@ -74,13 +74,15 @@ const Home = () => {
               <VideoContent
                 video={video}
                 key={video.id}
-                setSelectedVideoId={setSelectedVideoId}
+                setSelectedVideo={setSelectedVideo}
               />
             );
           })}
         {/* {videoList && videoList.map((video) => <VideoContent video={video} />)} */}
       </div>
-      {selectedVideoId && isMaskOn && <ModalVideo id={selectedVideoId} />}
+      {selectedVideo && isMaskOn && (
+        <ModalVideo selectedVideo={selectedVideo} />
+      )}
     </>
   );
 };
