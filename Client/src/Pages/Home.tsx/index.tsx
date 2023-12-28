@@ -42,7 +42,10 @@ const Home = () => {
       observer = new IntersectionObserver(checkIntersect, defaultOption); // 관찰타겟이 존재한다면 관찰자를 생성한다.
       observer.observe(loaderRef.current); // 관찰자에게 관찰타겟을 알려준다
     }
-    return () => observer && observer.disconnect(); // 페이지가 넘어갈떄 관찰자가 존재하면 관찰을 멈춘다.
+    return () => {
+      observer && observer.disconnect(); // 페이지 새로고침 시 관찰자가 존재하면 관찰을 멈춘다.
+      sessionStorage.removeItem("likedListPageToken"); // 기존의 리스트 토큰을 삭제한다.
+    };
   }, [checkIntersect, defaultOption]);
 
   const getPlaylist = async () => {
@@ -51,8 +54,13 @@ const Home = () => {
   };
 
   const getLikedList = async () => {
-    const response = await axios.get("http://localhost:9090/api/likedlist");
-    setLikedList(response.data.likedList);
+    const {
+      data: { likedList, nextPageToken },
+    } = await axios.post("http://localhost:9090/api/likedlist", {
+      prevPageToken: sessionStorage.getItem("likedListPageToken"),
+    });
+    setLikedList((prev) => [...prev, ...likedList]);
+    sessionStorage.setItem("likedListPageToken", nextPageToken);
   };
 
   // const getVideos = async () => {
