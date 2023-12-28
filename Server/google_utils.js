@@ -61,7 +61,7 @@ class GoogleAuthClient {
   async getUserLikedList() {
     const response = await this.youtube.playlistItems.list({
       part: "snippet",
-      maxResults: 50,
+      maxResults: 20,
       playlistId: "LL", // "LL"은 유저가 "좋아요"한 동영상의 Playlist ID
     });
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Constant from "../../utils/Constant";
 import VideoContent from "../../Component/VideoContent";
 import "./index.less";
@@ -12,14 +12,38 @@ const URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResult
 const Home = () => {
   const [videoList, setVideoList] = useState<Video[]>();
   const [playlists, setPlaylists] = useState<any[]>([]);
-  const [likedList, setLikedList] = useState<Video[]>();
+  const [likedList, setLikedList] = useState<Video[] | []>([]);
   const [selectedVideo, setSelectedVideo] = useState<null | Video>(null);
   const { modalPosition } = useSelector(appManage);
+  const videoListRef = useRef<HTMLDivElement | null>(null);
+  const loaderRef = useRef<HTMLDivElement | null>(null);
+  const [page, setPage] = useState<number>(1);
+
+  const defaultOption = useMemo(
+    () => ({
+      root: null,
+      threshold: 0.5,
+      rootMargin: "0px",
+    }),
+    []
+  );
+
+  const checkIntersect = useCallback(([entry]: any, observer: any) => {
+    if (entry.isIntersecting) {
+      getLikedList();
+    }
+  }, []);
 
   useEffect(() => {
     // getVideos();
-    getLikedList();
-  }, []);
+    let observer: IntersectionObserver;
+    // 관찰타겟이 존재하는지 체크
+    if (loaderRef.current) {
+      observer = new IntersectionObserver(checkIntersect, defaultOption); // 관찰타겟이 존재한다면 관찰자를 생성한다.
+      observer.observe(loaderRef.current); // 관찰자에게 관찰타겟을 알려준다
+    }
+    return () => observer && observer.disconnect(); // 페이지가 넘어갈떄 관찰자가 존재하면 관찰을 멈춘다.
+  }, [checkIntersect, defaultOption]);
 
   const getPlaylist = async () => {
     const response = await axios.post("http://localhost:9090/api/plalist");
@@ -59,8 +83,8 @@ const Home = () => {
   //   localStorage.setItem(Constant.DATA_NAME, JSON.stringify(videoList));
   // };
   return (
-    <>
-      <div className="video_list">
+    <div style={{ display: "flex", flexFlow: "column" }}>
+      <div className="video_list" ref={videoListRef}>
         {/* <button onClick={getPlaylist}>get playlist</button> */}
         {/* <ul>
           {playlists.map((playlist) => (
@@ -79,10 +103,13 @@ const Home = () => {
           })}
         {/* {videoList && videoList.map((video) => <VideoContent video={video} />)} */}
       </div>
+      <div ref={loaderRef} style={{ marginTop: "20px", textAlign: "center" }}>
+        Loading...
+      </div>
       {selectedVideo && modalPosition !== undefined && (
         <ModalVideo selectedVideo={selectedVideo} />
       )}
-    </>
+    </div>
   );
 };
 
