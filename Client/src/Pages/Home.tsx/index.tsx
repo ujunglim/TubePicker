@@ -52,7 +52,7 @@ const Home = () => {
 
   const getLikedList = async () => {
     const response = await axios.get("http://localhost:9090/api/likedlist");
-    setLikedList(response.data.likedlist);
+    setLikedList(response.data.likedList);
   };
 
   // const getVideos = async () => {

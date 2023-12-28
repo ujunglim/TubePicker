@@ -58,14 +58,16 @@ class GoogleAuthClient {
     return playlists;
   }
 
-  async getUserLikedList() {
-    const response = await this.youtube.playlistItems.list({
+  async getUserLikedList(pageToken) {
+    const option = {
       part: "snippet",
       maxResults: 20,
       playlistId: "LL", // "LL"은 유저가 "좋아요"한 동영상의 Playlist ID
-    });
+    };
+    if (pageToken) option.pageToken = pageToken; // 앞선 페이지 토큰이 있으면 추가하고 유튜브서버에 다음 페이지 데이터 요청
+    const response = await this.youtube.playlistItems.list(option);
 
-    const likedVideos = response.data.items.map((item) => {
+    const likedList = response.data.items.map((item) => {
       const {
         title,
         resourceId: { videoId },
@@ -85,7 +87,7 @@ class GoogleAuthClient {
         thumbnails,
       };
     });
-    return likedVideos;
+    return { likedList, nextPageToken: response.data.nextPageToken };
   }
 }
 

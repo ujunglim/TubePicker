@@ -47,11 +47,13 @@ app.post("/api/plalist", async function (req, res) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+let pageToken = null;
 
 app.get('/api/likedlist', async (req, res) => {
   try{
-    const likedlist = await googleAuthClientInstance.getUserLikedList();
-    res.json({likedlist});
+    const {likedList, nextPageToken} = await googleAuthClientInstance.getUserLikedList(pageToken);
+    pageToken = nextPageToken;
+    res.json({likedList, nextPageToken});
   } catch (error) {
     console.error("Error retrieving video information:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
