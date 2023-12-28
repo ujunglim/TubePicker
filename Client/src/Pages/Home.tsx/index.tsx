@@ -17,7 +17,6 @@ const Home = () => {
   const { modalPosition } = useSelector(appManage);
   const videoListRef = useRef<HTMLDivElement | null>(null);
   const loaderRef = useRef<HTMLDivElement | null>(null);
-  const [page, setPage] = useState<number>(1);
 
   const defaultOption = useMemo(
     () => ({

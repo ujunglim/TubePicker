@@ -1,6 +1,6 @@
+import Folders from "../Pages/Folders";
 import Home from "../Pages/Home.tsx";
 import Landing from "../Pages/Landing";
-import WatchingVideo from "../Pages/WatchingVideo";
 
 const routes = [
   {
@@ -12,8 +12,8 @@ const routes = [
     element: <Home />,
   },
   {
-    path: "/watch/:id",
-    element: <WatchingVideo />,
+    path: "/folders",
+    element: <Folders />,
   },
 ];
 
