@@ -1,5 +1,5 @@
 import { FC } from "react";
-import "./index.less";
+import styles from "./index.module.scss";
 import { Video } from "../../types";
 interface Prop {
   selectedVideo: Video;
@@ -11,7 +11,7 @@ const ModalVideo: FC<Prop> = ({ selectedVideo }) => {
     <iframe
       id={id}
       title={title}
-      className="modal_video"
+      className={styles.modal_video}
       // type="text/html"
       width="720"
       height="405"

@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Constant from "../../utils/Constant";
 import VideoContent from "../../Component/VideoContent";
-import "./index.less";
+import styles from "./index.module.scss";
 import { Video } from "../../types";
 import ModalVideo from "../../Component/ModalVideo";
 import { appManage } from "../../store/slices/app";
@@ -91,7 +91,7 @@ const Home = () => {
   // };
   return (
     <div style={{ display: "flex", flexFlow: "column" }}>
-      <div className="video_list" ref={videoListRef}>
+      <div className={styles.video_list} ref={videoListRef}>
         {/* <button onClick={getPlaylist}>get playlist</button> */}
         {/* <ul>
           {playlists.map((playlist) => (

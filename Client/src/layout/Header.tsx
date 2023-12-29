@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import "./index.less";
+import styles from "./index.module.scss";
 import Logout from "../Component/Logout";
 
 const Header = () => {
@@ -10,8 +10,8 @@ const Header = () => {
   };
 
   return (
-    <div className={"header"}>
-      <h1 className="home_button" onClick={goToHome}>
+    <div className={styles.header}>
+      <h1 className={styles.home_button} onClick={goToHome}>
         TubePicker
       </h1>
       {localStorage.getItem("login") && <Logout />}

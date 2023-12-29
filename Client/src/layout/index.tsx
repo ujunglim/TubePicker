@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import Header from "./Header";
 import SideBar from "./SideBar";
-import "./index.less";
+import styles from "./index.module.scss";
 import { FC, useEffect, useCallback } from "react";
 import { appManage, setModalPosition } from "../store/slices/app";
 
@@ -33,14 +33,14 @@ const AppLayout: FC<prop> = ({ children }) => {
   }, [closeMask]);
 
   return (
-    <div className="layout">
+    <div className={styles.layout}>
       {modalPosition !== undefined && (
-        <div className="mask" onClick={closeMask}></div>
+        <div className={styles.mask} onClick={closeMask}></div>
       )}
       <Header />
-      <div className={"content"}>
+      <div className={styles.content}>
         <SideBar />
-        <div className="main">{children}</div>
+        <div className={styles.main}>{children}</div>
       </div>
     </div>
   );

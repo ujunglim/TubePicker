@@ -1,5 +1,5 @@
 import { FC } from "react";
-import "./index.less";
+import styles from "./index.module.scss";
 interface Prop {
   title: string;
   content: any; ////////////////////////////////
@@ -8,8 +8,8 @@ interface Prop {
 const Modal: FC<Prop> = ({ title, content, handleOk }) => {
   console.log(content);
   return (
-    <div className="modal">
-      <div className="header">
+    <div className={styles.modal}>
+      <div className={styles.header}>
         <p>{title}</p>
         <button>x</button>
       </div>
