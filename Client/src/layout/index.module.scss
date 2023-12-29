@@ -1,3 +1,4 @@
+@import '../variables.scss';
 @font-face {
   font-family: 'Kakao';
   src: url('../../public/fonts/KakaoRegular.ttf') format('truetype');
@@ -14,6 +15,21 @@ body {
   img {
     width: 100%;
   }
+
+  button {
+    padding: 10px 25px;
+    border: none;
+    background-color: $primary-color;
+    color: $white-color;
+    cursor: pointer;
+    border-radius: 3px;
+
+    &:hover {
+      background-color: $accent-color;
+      transition: all 0.3ms ease-in-out;
+
+    }
+  }
 }
 
 .layout {
@@ -27,7 +43,7 @@ body {
     height: 100vh;
     top: 0;
     left: 0;
-    background-color: rgba(61, 61, 61, 0.63);
+    background-color: $mask-color;
     z-index: 11;
   }
 }

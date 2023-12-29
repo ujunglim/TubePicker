@@ -1,3 +1,5 @@
+@import '../../variables.scss';
+
 .modal {
   position: fixed;
   top: 50%;
@@ -10,11 +12,52 @@
   flex-flow: column;
   justify-content: space-between;
   border: none;
-  background-color: rgb(252, 252, 252);
+  background-color: $white-color;
   border-radius: .5rem;
+  padding: 1rem;
+  animation: slide-up 0.5s ease-out; 
+
+  @keyframes slide-up {
+    from {
+      transform: translate(-40%, -45%); 
+    }
+    to {
+      transform: translate(-40%, -50%); // 위로 이동하여 나타남 */
+    }
+  }
 
   .header {
     display: flex;
     justify-content: space-between;
+
+    .title {
+      font-weight: 500;
+    }
+
+    button {
+      padding: 0px;
+    }
+
+    .closeBtn {
+      background: none;
+      font-size: 24px;
+      color: $grey-light-color;
+  
+      &:hover {
+        color: $grey-color;
+        transition: all 0.3s ease-in-out;
+      }
+    }
+  }
+
+  .children {
+    display: flex;
+    justify-content: center;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 10px;
   }
 }

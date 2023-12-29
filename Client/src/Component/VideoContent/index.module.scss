@@ -1,12 +1,13 @@
+@import '../../variables.scss';
+
 .video_content_box {
   display: flex;
   flex-flow: column;
-  color: black;
+  color: $black-color;
   cursor: pointer;
 
   .video_img {
     position: relative;
-
   }
 
   .title {
@@ -15,7 +16,7 @@
   }
 
   .subtitle {
-    color: grey;
+    color: $grey-color;
     margin: 0px;
   }
 }

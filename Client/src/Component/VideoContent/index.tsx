@@ -1,6 +1,6 @@
 import { Video } from "../../types";
 import calcTimeDiff from "../../utils/calcTimeDiff";
-import "./index.less";
+import styles from "./index.module.scss";
 import { FC, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { setModalPosition } from "../../store/slices/app";
@@ -24,13 +24,13 @@ const VideoContent: FC<Props> = ({ video, setSelectedVideo }) => {
   }, [dispatch, setSelectedVideo, video]);
 
   return (
-    <div key={id} className="video_content_box" onClick={openModal}>
-      <div className="video_img">
+    <div key={id} className={styles.video_content_box} onClick={openModal}>
+      <div className={styles.video_img}>
         <img src={thumbnails?.medium?.url} alt="thumbnail" />
       </div>
-      <p className="title">{title}</p>
-      <p className="subtitle">{channelTitle}</p>
-      <p className="subtitle">{calcTimeDiff(publishedAt)}</p>
+      <p className={styles.title}>{title}</p>
+      <p className={styles.subtitle}>{channelTitle}</p>
+      <p className={styles.subtitle}>{calcTimeDiff(publishedAt)}</p>
     </div>
   );
 };
