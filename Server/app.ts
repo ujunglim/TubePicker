@@ -6,6 +6,7 @@ const cors = require("cors");
 const GoogleAuthClient = require("./google_utils.js");
 const session = require("express-session");
 const cryptoModule = require('crypto');
+const mysql = require('mysql');
 
 // Init Constants
 const PORT = 9090;
@@ -59,6 +60,23 @@ app.post('/api/likedlist', async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 })
+
+// ========= DATABASE ===========
+// mysql에 연결
+const db = mysql.createConnection({
+  host: '127.0.0.1',
+  user: 'root',
+  password: '370123',
+  database: 'tubePicker'
+});
+
+// Connect to MySQL
+db.connect((err) => {
+  if (err) {
+    throw err;
+  }
+  console.log('MySQL connected');
+});
 
 // =========== ROUTES ===========
 app.use('/folder', folderRout)
