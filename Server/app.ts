@@ -1,3 +1,5 @@
+import folderRout from './routes/folderRout';
+
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
@@ -57,6 +59,9 @@ app.post('/api/likedlist', async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 })
+
+// =========== ROUTES ===========
+app.use('/folder', folderRout)
 
 app.listen(PORT, () => {
   console.log(`Listening on ${PORT}`);

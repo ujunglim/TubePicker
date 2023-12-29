@@ -3,8 +3,10 @@ import Modal from "../../Component/Modal";
 import { setModalPosition } from "../../store/slices/app";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 
 const Folders = () => {
+  const [folderList, setFolderList] = useState([]);
   const [inputValue, setInputValue] = useState<string>("");
   const dispatch = useDispatch();
   const openModal = () => {
@@ -29,13 +31,17 @@ const Folders = () => {
     dispatch(setModalPosition(undefined));
   };
 
-  const createFolder = () => {
+  const createFolder = async () => {
     // valid
     if (inputValue === "") {
       toast.error("이름을 입력해주세요");
       return;
     }
-    // api/create/folder
+    // create folder
+    const response = await axios.post("http://localhost:9090/folder/create", {
+      name: inputValue,
+    });
+
     toast.info("와우 폴더생성을 성공했습니다!");
     handleClose();
   };
