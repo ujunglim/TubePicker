@@ -22,8 +22,13 @@ app.use(
     saveUninitialized: false,
   })
 );
+app.use(express.static(path.join(__dirname, '/../Client/build'))); // js, css등을 express에서 접근가능하게 한다. 
 
 const googleAuthClientInstance = new GoogleAuthClient();
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '/../Client/build', 'index.html'));
+})
 
 app.post("/google/get_login_url", function (req, res) {
   console.log("/google/get_login_url");
