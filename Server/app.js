@@ -1,13 +1,12 @@
-import folderRout from './routes/folderRout';
-
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const GoogleAuthClient = require("./google_utils.js");
 const session = require("express-session");
-const cryptoModule = require('crypto');
-const mysql = require('mysql2');
-const dotenv = require('dotenv');
+const cryptoModule = require("crypto");
+const mysql = require("mysql2");
+const dotenv = require("dotenv");
+const { folderRout } = require("./routes/folderRout.js");
 
 // Init Constants
 const PORT = 9090;
@@ -24,13 +23,19 @@ app.use(
     saveUninitialized: false,
   })
 );
-app.use(express.static(path.join(__dirname, '/../Client/build'))); // js, css등을 express에서 접근가능하게 한다. 
+app.use(express.static(path.join(__dirname, "/../Client/build"))); // js, css등을 express에서 접근가능하게 한다.
 
 const googleAuthClientInstance = new GoogleAuthClient();
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '/../Client/build', 'index.html'));
-})
+// check server is opened or not
+app.get("/ping", (req, res) => {
+  console.log("==== Server is online  ===");
+  res.status(200).send("Server is online ");
+});
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "/../Client/build", "index.html"));
+});
 
 app.post("/google/get_login_url", function (req, res) {
   console.log("/google/get_login_url");
@@ -41,7 +46,9 @@ app.post("/google/get_login_url", function (req, res) {
 // 인증되면 구글서버->앱서버로 인증코드 전송
 app.get("/google/send_auth_code", async function (req, res) {
   console.log("/google/send_auth_code", req.query.code);
-  const accessToken = await googleAuthClientInstance.getAccessToken(req.query.code);
+  const accessToken = await googleAuthClientInstance.getAccessToken(
+    req.query.code
+  );
   // TODO save the tokens for every session, use the session's token to restore the googleAuthClient later
   req.session.token = accessToken; // Save the token to the session
   await googleAuthClientInstance.initWithAccessToken(accessToken);
@@ -58,41 +65,42 @@ app.post("/api/plalist", async function (req, res) {
   }
 });
 
-app.post('/api/likedlist', async (req, res) => {
-  try{
-    const {likedList, nextPageToken} = await googleAuthClientInstance.getUserLikedList(req.body.prevPageToken);
-    res.json({likedList, nextPageToken}); // 그 다음 페이지토큰 전달
+app.post("/api/likedlist", async (req, res) => {
+  try {
+    const { likedList, nextPageToken } =
+      await googleAuthClientInstance.getUserLikedList(req.body.prevPageToken);
+    res.json({ likedList, nextPageToken }); // 그 다음 페이지토큰 전달
   } catch (error) {
     console.error("Error retrieving video information:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
-})
+});
 
 // ========= DATABASE ===========
-const environment = process.argv[2]; 
+const environment = process.argv[2];
 // environment dev, pro판단
 if (!environment) {
-  console.log('Invalid Argument:', environment)
+  console.log("Invalid Argument:", environment);
 }
 
 let dbSetting = null;
-if (environment === 'dev') {
+if (environment === "dev") {
   dbSetting = {
     host: process.env.AWS_DOMAIN,
     user: process.env.MYSQL_EXTERNAL_USER,
     password: process.env.MYSQL_EXTERNAL_PWD,
     database: process.env.MYSQL_EXTERNAL_DB,
-  }
-} else if (environment === 'pro') {
+  };
+} else if (environment === "pro") {
   dbSetting = {
     host: process.env.AWS_DOMAIN,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PWD,
-    database: process.env.MYSQL_DB
-  }
+    database: process.env.MYSQL_DB,
+  };
 }
 
-console.log('[environment] ', environment, dbSetting);
+console.log("[environment] ", environment, dbSetting);
 const db = mysql.createConnection(dbSetting);
 
 // Connect to MySQL
@@ -100,11 +108,11 @@ db.connect((err) => {
   if (err) {
     throw err;
   }
-  console.log('MySQL connected');
+  console.log("MySQL connected");
 });
 
 // =========== ROUTES ===========
-app.use('/folder', folderRout)
+// app.use("/folder", folderRout);
 
 app.listen(PORT, () => {
   console.log(`Listening on ${PORT}`);
