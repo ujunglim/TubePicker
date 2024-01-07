@@ -6,11 +6,13 @@ const cors = require("cors");
 const GoogleAuthClient = require("./google_utils.js");
 const session = require("express-session");
 const cryptoModule = require('crypto');
-const mysql = require('mysql');
+const mysql = require('mysql2');
+const dotenv = require('dotenv');
 
 // Init Constants
 const PORT = 9090;
 const app = express();
+dotenv.config(); // Load environment variables from .env file
 
 // Setting up Server
 app.use(cors());
@@ -67,13 +69,31 @@ app.post('/api/likedlist', async (req, res) => {
 })
 
 // ========= DATABASE ===========
-// mysql에 연결
-const db = mysql.createConnection({
-  host: '127.0.0.1',
-  user: 'root',
-  password: '370123',
-  database: 'tubePicker'
-});
+const environment = process.argv[2]; 
+// environment dev, pro판단
+if (!environment) {
+  console.log('Invalid Argument:', environment)
+}
+
+let dbSetting = null;
+if (environment === 'dev') {
+  dbSetting = {
+    host: process.env.AWS_DOMAIN,
+    user: process.env.MYSQL_EXTERNAL_USER,
+    password: process.env.MYSQL_EXTERNAL_PWD,
+    database: process.env.MYSQL_EXTERNAL_DB,
+  }
+} else if (environment === 'pro') {
+  dbSetting = {
+    host: process.env.AWS_DOMAIN,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PWD,
+    database: process.env.MYSQL_DB
+  }
+}
+
+console.log('[environment] ', environment, dbSetting);
+const db = mysql.createConnection(dbSetting);
 
 // Connect to MySQL
 db.connect((err) => {
