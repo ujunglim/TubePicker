@@ -5,12 +5,12 @@ APP_NAME="tube_picker"
 SCRIPT_PATH="app.js"
 
 # Check if the process is running
-if sudo pm2 list | grep -q "$APP_NAME"; then
+if pm2 list | grep -q "$APP_NAME"; then
   echo "The process $APP_NAME is already running in PM2."
-  sudo pm2 restart "$APP_NAME"
+  pm2 restart "$APP_NAME"
 else
   echo "The process $APP_NAME is not currently running in PM2."
-  sudo pm2 start "$SCRIPT_PATH" --name "$APP_NAME" -- pro
+  pm2 start "$SCRIPT_PATH" --name "$APP_NAME" -- pro
 fi
 
 echo "All PM2 processes started."
