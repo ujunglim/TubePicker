@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon app.js dev",
-    "pro": "pm2 restart app.js pro"
+    "start": "nodemon app.js dev",
+    "deploy": "deploy.bat"
   },
   "keywords": [],
   "author": "",

@@ -6,7 +6,6 @@ const session = require("express-session");
 const cryptoModule = require("crypto");
 const mysql = require("mysql2");
 const dotenv = require("dotenv");
-const { folderRout } = require("./routes/folderRout.js");
 
 // Init Constants
 const PORT = 9090;

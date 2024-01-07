@@ -1,6 +1,7 @@
-const fs = require("fs");
 const { google } = require("googleapis");
-const oauthClientJson = fs.readFileSync("oauth_client.json", "utf8");
+const dotenv = require("dotenv");
+dotenv.config();
+const oauthClientJson = process.env.OAUTH_CLIENT;
 const oauthClient = JSON.parse(oauthClientJson);
 
 class GoogleAuthClient {
