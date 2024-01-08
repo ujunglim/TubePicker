@@ -2,7 +2,7 @@
 
 echo "Starting PM2 processes..."
 APP_NAME="tube_picker"
-SCRIPT_PATH="app.js"
+SCRIPT_PATH="./bin/www"
 PM2="/home/ubuntu/.nvm/versions/node/v17.9.1/bin/pm2"
 
 # Check if the process is running

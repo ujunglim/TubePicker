@@ -1,7 +1,7 @@
 @echo off
 echo Starting PM2 processes...
 set APP_NAME=tube_picker
-set SCRIPT_PATH=app.js
+set SCRIPT_PATH=./bin/www
 
 REM Check if the process is running
 pm2 list | findstr /C:"%APP_NAME%" >nul
