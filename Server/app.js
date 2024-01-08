@@ -92,7 +92,7 @@ if (environment === "dev") {
   };
 } else if (environment === "pro") {
   dbSetting = {
-    host: process.env.AWS_DOMAIN,
+    host: "127.0.0.1",
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PWD,
     database: process.env.MYSQL_DB,
