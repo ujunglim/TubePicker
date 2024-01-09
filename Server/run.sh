@@ -11,7 +11,7 @@ if "$PM2" list | grep -q "$APP_NAME"; then
   "$PM2" restart "$APP_NAME"
 else
   echo "The process $APP_NAME is not currently running in PM2."
-  "$PM2" start "$SCRIPT_PATH" --name "$APP_NAME" -- pro
+  "$PM2" start "$SCRIPT_PATH" --name "$APP_NAME" --max-restarts=1 -- pro
 fi
 
 echo "All PM2 processes started."
