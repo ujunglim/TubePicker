@@ -53,15 +53,23 @@ const Home = () => {
   };
 
   const getLikedList = async () => {
+    // // dev
+    // const {
+    //   data: { likedList, nextPageToken },
+    // } = await axios.post("http://localhost:9090/api/likedlist", {
+    //   prevPageToken: sessionStorage.getItem("likedListPageToken"),
+    // });
+
+    // pro
     const {
       data: { likedList, nextPageToken },
     } = await axios.post(
-      // } = await axios.post("http://localhost:9090/api/likedlist", {
       "http://ec2-43-203-78-29.ap-northeast-2.compute.amazonaws.com:9090/api/likedlist",
       {
         prevPageToken: sessionStorage.getItem("likedListPageToken"),
       }
     );
+
     setLikedList((prev) => [...prev, ...likedList]);
     sessionStorage.setItem("likedListPageToken", nextPageToken);
   };
