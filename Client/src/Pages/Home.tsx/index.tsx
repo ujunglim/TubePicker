@@ -55,9 +55,13 @@ const Home = () => {
   const getLikedList = async () => {
     const {
       data: { likedList, nextPageToken },
-    } = await axios.post("http://localhost:9090/api/likedlist", {
-      prevPageToken: sessionStorage.getItem("likedListPageToken"),
-    });
+    } = await axios.post(
+      // } = await axios.post("http://localhost:9090/api/likedlist", {
+      `${process.env.REACT_APP_AWS_INSTANCE}/api/likedlist`,
+      {
+        prevPageToken: sessionStorage.getItem("likedListPageToken"),
+      }
+    );
     setLikedList((prev) => [...prev, ...likedList]);
     sessionStorage.setItem("likedListPageToken", nextPageToken);
   };
