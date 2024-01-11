@@ -69,7 +69,8 @@ app.post("/api/plalist", async function (req, res) {
 app.post("/api/likedlist", async (req, res) => {
   try {
     const { likedList, nextPageToken } =
-      await googleAuthClientInstance.getUserLikedList(req.body.prevPageToken);
+      // await googleAuthClientInstance.getUserLikedList(req.body.prevPageToken);
+      await googleAuthClientInstance.getUserLikedList();
     res.json({ likedList, nextPageToken }); // 그 다음 페이지토큰 전달
   } catch (error) {
     console.error("Error retrieving video information:", error.message);
