@@ -2,13 +2,16 @@ import axios from "axios";
 
 const Landing = () => {
   const handleClick = async () => {
+    // dev
+    // const response = await axios.post(
+    //   "http://localhost:9090/google/get_login_url"
+    // );
+
+    // pro
     const response = await axios.post(
-      "http://localhost:9090/google/get_login_url"
+      "http://ec2-43-203-78-29.ap-northeast-2.compute.amazonaws.com:9090/google/get_login_url"
     );
-    console.log(
-      "responses from http://localhost:9090/google/get_login_url",
-      response.data
-    );
+    console.log(response.data);
     const { auth2Url } = response.data;
     window.location.href = auth2Url;
   };
