@@ -7,6 +7,7 @@ import { Video } from "../../types";
 import ModalVideo from "../../Component/ModalVideo";
 import { appManage } from "../../store/slices/app";
 import { useSelector } from "react-redux";
+import api from "../../api";
 const URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&channelId=UCw4izi2fsJzFltt3EbmokWA&type=video&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`;
 
 const Home = () => {
@@ -59,16 +60,19 @@ const Home = () => {
     // } = await axios.post("http://localhost:9090/api/likedlist", {
     //   prevPageToken: sessionStorage.getItem("likedListPageToken"),
     // });
-
-    // pro
     const {
       data: { likedList, nextPageToken },
-    } = await axios.post(
-      "http://ec2-43-203-78-29.ap-northeast-2.compute.amazonaws.com:9090/api/likedlist",
-      {
-        prevPageToken: sessionStorage.getItem("likedListPageToken"),
-      }
-    );
+    } = await api.post("/api/likedlist"); // todo prevPageToken
+
+    // // pro
+    // const {
+    //   data: { likedList, nextPageToken },
+    // } = await axios.post(
+    //   "http://ec2-43-203-78-29.ap-northeast-2.compute.amazonaws.com:9090/api/likedlist",
+    //   {
+    //     prevPageToken: sessionStorage.getItem("likedListPageToken"),
+    //   }
+    // );
 
     setLikedList((prev) => [...prev, ...likedList]);
     sessionStorage.setItem("likedListPageToken", nextPageToken);
