@@ -51,7 +51,9 @@ app.get("/google/send_auth_code", async function (req, res) {
   // TODO save the tokens for every session, use the session's token to restore the googleAuthClient later
   req.session.token = accessToken; // Save the token to the session
   await googleAuthClientInstance.initWithAccessToken(accessToken);
-  res.redirect("http://localhost:9090/home"); // TODO dev/pro
+  res.redirect(
+    "http://ec2-43-203-78-29.ap-northeast-2.compute.amazonaws.com:9090/home"
+  ); // TODO dev/pro
 });
 
 app.post("/api/plalist", async function (req, res) {
