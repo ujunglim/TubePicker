@@ -57,7 +57,7 @@ const Home = () => {
       data: { likedList, nextPageToken },
     } = await axios.post(
       // } = await axios.post("http://localhost:9090/api/likedlist", {
-      `${process.env.REACT_APP_AWS_INSTANCE}/api/likedlist`,
+      "http://ec2-43-203-78-29.ap-northeast-2.compute.amazonaws.com:9090/api/likedlist",
       {
         prevPageToken: sessionStorage.getItem("likedListPageToken"),
       }
