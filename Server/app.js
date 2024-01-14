@@ -41,9 +41,6 @@ app.get("/", (req, res) => {
 app.post("/google/get_login_url", function (req, res) {
   console.log("/google/get_login_url");
   const auth2Url = googleAuthClientInstance.getAuth2Url();
-  console.log(
-    "=========================================================================="
-  );
   res.json({ auth2Url });
 });
 
