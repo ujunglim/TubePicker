@@ -8,7 +8,7 @@ const mysql = require("mysql2");
 const dotenv = require("dotenv");
 
 // Init Constants
-const PORT = 9090;
+const PORT = 443;
 const app = express();
 dotenv.config(); // Load environment variables from .env file
 
