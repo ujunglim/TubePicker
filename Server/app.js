@@ -6,9 +6,10 @@ const session = require("express-session");
 const cryptoModule = require("crypto");
 const mysql = require("mysql2");
 const dotenv = require("dotenv");
+const https = require("https");
 
 // Init Constants
-const PORT = 443;
+const PORT = 9090;
 const app = express();
 dotenv.config(); // Load environment variables from .env file
 
@@ -90,6 +91,7 @@ if (!environment) {
 }
 
 let dbSetting = null;
+let httpsServer;
 if (environment === "dev") {
   dbSetting = {
     host: process.env.AWS_DOMAIN,
@@ -104,6 +106,12 @@ if (environment === "dev") {
     password: process.env.MYSQL_PWD,
     database: process.env.MYSQL_DB,
   };
+
+  const https = require("https");
+  const privateKey = fs.readFileSync("sslcert/server.key", "utf8");
+  const certificate = fs.readFileSync("sslcert/server.crt", "utf8");
+  const credentials = { key: privateKey, cert: certificate };
+  httpsServer = https.createServer(credentials, app);
 }
 
 console.log("[environment] ", environment, dbSetting);
@@ -120,6 +128,13 @@ db.connect((err) => {
 // =========== ROUTES ===========
 // app.use("/folder", folderRout);
 
-app.listen(PORT, () => {
-  console.log(`Listening on ${PORT}`);
-});
+console.log("=============", environment, "============");
+if (environment === "pro") {
+  httpsServer.listen(443, () => {
+    console.log("[PRO]Listening on 443");
+  });
+} else {
+  app.listen(PORT, () => {
+    console.log(`[DEV]Listening on ${PORT}`);
+  });
+}
