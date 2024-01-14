@@ -7,6 +7,7 @@ const cryptoModule = require("crypto");
 const mysql = require("mysql2");
 const dotenv = require("dotenv");
 const https = require("https");
+const fs = require("fs");
 
 // Init Constants
 const PORT = 9090;
@@ -84,6 +85,7 @@ app.get("*", (req, res) => {
 });
 
 // ========= DATABASE ===========
+console.log(process.env.NODE_ENV, "=========================");
 const environment = process.argv[2];
 // environment dev, pro판단
 if (!environment) {
@@ -107,11 +109,13 @@ if (environment === "dev") {
     database: process.env.MYSQL_DB,
   };
 
-  const https = require("https");
-  const privateKey = fs.readFileSync("sslcert/server.key", "utf8");
-  const certificate = fs.readFileSync("sslcert/server.crt", "utf8");
-  const credentials = { key: privateKey, cert: certificate };
-  httpsServer = https.createServer(credentials, app);
+  // SSL 인증서 키
+  const sslKeys = {
+    ca: fs.readFileSync("/etc/letsencrypt/live/ujung.link/fullchain.pem"),
+    key: fs.readFileSync("/etc/letsencrypt/live/ujung.link/privkey.pem"),
+    cert: fs.readFileSync("/etc/letsencrypt/live/ujung.link/cert.pem"),
+  };
+  httpsServer = https.createServer(sslKeys, app);
 }
 
 console.log("[environment] ", environment, dbSetting);
