@@ -4,6 +4,7 @@ import { setModalPosition } from "../../store/slices/app";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
+import api from "../../api";
 
 const Folders = () => {
   const [folderList, setFolderList] = useState([]);
@@ -20,7 +21,7 @@ const Folders = () => {
   const content = (
     <input
       type="text"
-      placeholder="이름을 입력하세요"
+      placeholder="폴더 이름을 입력하세요"
       value={inputValue}
       onChange={handleChange}
     ></input>
@@ -34,13 +35,16 @@ const Folders = () => {
   const createFolder = async () => {
     // valid
     if (inputValue === "") {
-      toast.error("이름을 입력해주세요");
+      toast.error("폴더 이름을 입력해주세요");
       return;
     }
     // create folder
-    const response = await axios.post("http://localhost:9090/folder/create", {
-      name: inputValue,
-    });
+    const response = await api.post(
+      `${process.env.REACT_APP_AWS_INSTANCE}/folder/create`,
+      {
+        name: inputValue,
+      }
+    );
 
     toast.info("와우 폴더생성을 성공했습니다!");
     handleClose();
