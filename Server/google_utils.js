@@ -1,5 +1,5 @@
-const { google } = require("googleapis");
-const dotenv = require("dotenv");
+import { google } from "googleapis";
+import dotenv from "dotenv";
 dotenv.config();
 const oauthClientJson = process.env.OAUTH_CLIENT;
 const oauthClient = JSON.parse(oauthClientJson);
@@ -92,4 +92,4 @@ class GoogleAuthClient {
   }
 }
 
-module.exports = GoogleAuthClient;
+export default GoogleAuthClient;

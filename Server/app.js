@@ -1,13 +1,15 @@
-const express = require("express");
-const path = require("path");
-const cors = require("cors");
-const GoogleAuthClient = require("./google_utils.js");
-const session = require("express-session");
-const cryptoModule = require("crypto");
-const mysql = require("mysql2");
-const dotenv = require("dotenv");
-const https = require("https");
-const fs = require("fs");
+import express from "express";
+import path, { dirname } from "path";
+import cors from "cors";
+import GoogleAuthClient from "./google_utils.js";
+import session from "express-session";
+import cryptoModule from "crypto";
+import mysql from "mysql2";
+import dotenv from "dotenv";
+import https from "https";
+import fs from "fs";
+import folderRouter from "./routes/folderRouter.js";
+import { fileURLToPath } from "url";
 
 // Init Constants
 const PORT = 9090;
@@ -24,6 +26,9 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 app.use(express.static(path.join(__dirname, "/../Client/build"))); // js, css등을 express에서 접근가능하게 한다.
 
 const googleAuthClientInstance = new GoogleAuthClient();
@@ -53,7 +58,8 @@ app.get("/google/send_auth_code", async function (req, res) {
   // TODO save the tokens for every session, use the session's token to restore the googleAuthClient later
   req.session.token = accessToken; // Save the token to the session
   await googleAuthClientInstance.initWithAccessToken(accessToken);
-  res.redirect("https://ujung.link/home"); // TODO dev/pro
+  // res.redirect("https://ujung.link/home"); // TODO dev/pro
+  res.redirect("http://localhost:9090/home"); // TODO dev/pro
 });
 
 app.post("/api/plalist", async function (req, res) {
@@ -76,6 +82,16 @@ app.post("/api/likedlist", async (req, res) => {
     console.error("Error retrieving video information:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
+});
+
+// =========== ROUTES ===========
+// app.use("/folder", folderRouter);
+app.post("/folders", (req, res) => {
+  const sql = "SELECT * FROM folders";
+  db.query(sql, (err, data) => {
+    if (err) return res.json("error");
+    return res.json(data);
+  });
 });
 
 app.get("*", (req, res) => {
@@ -115,11 +131,12 @@ if (environment === "dev") {
   httpsServer = https.createServer(sslKeys, app);
 }
 
-console.log("[environment] ", environment, dbSetting);
-const db = mysql.createConnection(dbSetting);
-
 // Connect to MySQL
-db.connect((err) => {
+
+console.log("[environment] ", environment, dbSetting);
+const db = mysql.createPool(dbSetting); // 요청이 끝난 후에 자동으로 반환되고 재사용된다
+
+db.getConnection((err) => {
   if (err) {
     throw err;
   }
@@ -127,7 +144,9 @@ db.connect((err) => {
 });
 
 // =========== ROUTES ===========
-// app.use("/folder", folderRout);
+app.use("/folder", folderRouter);
+// app.use(notFound);
+// app.use(handleError);
 
 console.log("=============", environment, "============");
 if (environment === "pro") {
