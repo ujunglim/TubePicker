@@ -14,6 +14,7 @@ class GoogleAuthClient {
       "https://www.googleapis.com/auth/youtube.force-ssl",
       "https://www.googleapis.com/auth/youtube",
       "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile",
     ];
     this.client = new google.auth.OAuth2(
       oauthClient.web.client_id,
@@ -40,6 +41,25 @@ class GoogleAuthClient {
     await this.client.setCredentials(tokens);
     this.youtube = google.youtube({ version: "v3", auth: this.client });
     console.log("[initWithToken] Credentials set", this.client.credentials);
+  }
+
+  getUserInfo() {
+    return new Promise((resolve, reject) => {
+      var oauth2 = google.oauth2({
+        auth: this.client,
+        version: "v2",
+      });
+
+      oauth2.userinfo.get(function (err, res) {
+        if (err) {
+          console.log("[GETTING USER INFO]", err);
+          reject(err);
+        } else {
+          const { id, email, name, picture } = res.data;
+          resolve({ id, email, name, picture });
+        }
+      });
+    });
   }
 
   // ============= api ====================

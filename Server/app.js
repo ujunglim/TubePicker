@@ -58,6 +58,8 @@ app.get("/google/send_auth_code", async function (req, res) {
   // TODO save the tokens for every session, use the session's token to restore the googleAuthClient later
   req.session.token = accessToken; // Save the token to the session
   await googleAuthClientInstance.initWithAccessToken(accessToken);
+  const { id, email, name, picture } =
+    await googleAuthClientInstance.getUserInfo();
   // res.redirect("https://ujung.link/home"); // TODO dev/pro
   res.redirect("http://localhost:9090/home"); // TODO dev/pro
 });
