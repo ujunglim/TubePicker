@@ -60,6 +60,11 @@ app.get("/google/send_auth_code", async function (req, res) {
   await googleAuthClientInstance.initWithAccessToken(accessToken);
   const { id, email, name, picture } =
     await googleAuthClientInstance.getUserInfo();
+  // console.log(id, email, name, picture);
+  res.cookie("userid", id);
+  res.cookie("userEmail", email);
+  res.cookie("userName", name);
+  res.cookie("userPic", picture);
   const env = process.env.NODE_ENV.trim();
   console.log(`========= Server is in [${env}] ==========`);
   switch (env) {

@@ -5,8 +5,8 @@ import VideoContent from "../../Component/VideoContent";
 import styles from "./index.module.scss";
 import { Video } from "../../types";
 import ModalVideo from "../../Component/ModalVideo";
-import { appManage } from "../../store/slices/app";
-import { useSelector } from "react-redux";
+import { appManage, setIsLoggedIn } from "../../store/slices/app";
+import { useDispatch, useSelector } from "react-redux";
 import api from "../../api";
 const URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&channelId=UCw4izi2fsJzFltt3EbmokWA&type=video&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`;
 
@@ -18,6 +18,7 @@ const Home = () => {
   const { modalPosition } = useSelector(appManage);
   const videoListRef = useRef<HTMLDivElement | null>(null);
   const loaderRef = useRef<HTMLDivElement | null>(null);
+  const dispatch = useDispatch();
 
   const defaultOption = useMemo(
     () => ({
@@ -35,7 +36,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    // getVideos();
+    dispatch(setIsLoggedIn(true));
     let observer: IntersectionObserver;
     // 관찰타겟이 존재하는지 체크
     if (loaderRef.current) {
