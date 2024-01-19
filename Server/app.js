@@ -60,8 +60,8 @@ app.get("/google/send_auth_code", async function (req, res) {
   await googleAuthClientInstance.initWithAccessToken(accessToken);
   const { id, email, name, picture } =
     await googleAuthClientInstance.getUserInfo();
-  // res.redirect("https://ujung.link/home"); // TODO dev/pro
-  res.redirect("http://localhost:9090/home"); // TODO dev/pro
+  res.redirect("https://ujung.link/home"); // TODO dev/pro
+  // res.redirect("http://localhost:9090/home"); // TODO dev/pro
 });
 
 app.post("/api/plalist", async function (req, res) {
