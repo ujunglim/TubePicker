@@ -10,7 +10,7 @@ const getBaseUrl = () => {
       url = process.env.REACT_APP_AWS_INSTANCE;
       break;
   }
-  console.log('========== Environment is =============', process.env.NODE_ENV, url)
+  console.log(`====== Client is in [${process.env.NODE_ENV}] ========`, url)
   return url;
 }
 

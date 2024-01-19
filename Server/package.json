@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon app.js dev",
-    "deploy": "deploy.bat"
+    "start": "set NODE_ENV=dev && nodemon app.js dev",
+    "deploy": "set NODE_ENV=pro && deploy.bat"
   },
   "keywords": [],
   "author": "",

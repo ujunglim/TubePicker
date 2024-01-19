@@ -49,30 +49,16 @@ const Home = () => {
   }, [checkIntersect, defaultOption]);
 
   const getPlaylist = async () => {
-    const response = await axios.post("http://localhost:9090/api/plalist");
+    const response = await api.post("/api/plalist");
     setPlaylists(response.data);
   };
 
   const getLikedList = async () => {
-    // // dev
-    // const {
-    //   data: { likedList, nextPageToken },
-    // } = await axios.post("http://localhost:9090/api/likedlist", {
-    //   prevPageToken: sessionStorage.getItem("likedListPageToken"),
-    // });
     const {
       data: { likedList, nextPageToken },
-    } = await api.post("/api/likedlist"); // todo prevPageToken
-
-    // // pro
-    // const {
-    //   data: { likedList, nextPageToken },
-    // } = await axios.post(
-    //   "http://ec2-43-203-78-29.ap-northeast-2.compute.amazonaws.com:9090/api/likedlist",
-    //   {
-    //     prevPageToken: sessionStorage.getItem("likedListPageToken"),
-    //   }
-    // );
+    } = await api.post("/api/likedlist", {
+      prevPageToken: sessionStorage.getItem("likedListPageToken"),
+    }); // todo prevPageToken
 
     setLikedList((prev) => [...prev, ...likedList]);
     sessionStorage.setItem("likedListPageToken", nextPageToken);
