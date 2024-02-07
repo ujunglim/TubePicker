@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "set NODE_ENV=dev && nodemon app.js dev",
+    "start": "cd ../Client && npm run build && cd ../Server && set NODE_ENV=dev && nodemon app.js dev",
     "deploy": "set NODE_ENV=pro && deploy.bat"
   },
   "keywords": [],

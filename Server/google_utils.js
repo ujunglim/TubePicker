@@ -40,7 +40,8 @@ class GoogleAuthClient {
   async initWithAccessToken(tokens) {
     await this.client.setCredentials(tokens);
     this.youtube = google.youtube({ version: "v3", auth: this.client });
-    console.log("[initWithToken] Credentials set", this.client.credentials);
+    console.log("[initWithToken] Credentials set");
+    // console.log(this.client.credentials);
   }
 
   getUserInfo() {

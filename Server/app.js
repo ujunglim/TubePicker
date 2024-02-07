@@ -10,6 +10,7 @@ import https from "https";
 import fs from "fs";
 import folderRouter from "./routes/folderRouter.js";
 import { fileURLToPath } from "url";
+import jwt from "jsonwebtoken";
 
 // Init Constants
 const PORT = 9090;
@@ -49,7 +50,7 @@ app.post("/google/get_login_url", function (req, res) {
   res.json({ auth2Url });
 });
 
-// 인증되면 구글서버->앱서버로 인증코드 전송
+// 구글 로그인 인증되면 구글서버->앱서버로 인증코드 전송
 app.get("/google/send_auth_code", async function (req, res) {
   console.log("/google/send_auth_code", req.query.code);
   const accessToken = await googleAuthClientInstance.getAccessToken(
@@ -65,6 +66,10 @@ app.get("/google/send_auth_code", async function (req, res) {
   res.cookie("userEmail", email);
   res.cookie("userName", name);
   res.cookie("userPic", picture);
+  // 로그인 성공하면 jwt토큰을 클라이언트한테 발급
+  const jwtToken = jwt.sign({ id: id }, process.env.JWT_SECRET);
+  res.cookie("jwtToken", jwtToken);
+
   const env = process.env.NODE_ENV.trim();
   console.log(`========= Server is in [${env}] ==========`);
   switch (env) {
