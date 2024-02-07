@@ -33,14 +33,14 @@ class GoogleAuthClient {
 
   async getAccessToken(authCode) {
     const res = await this.client.getToken(authCode);
-    console.log("[getAccessToken] AccessToken acquired");
+    console.log("[Got Google AccessToken]");
     return res.tokens;
   }
 
   async initWithAccessToken(tokens) {
     await this.client.setCredentials(tokens);
     this.youtube = google.youtube({ version: "v3", auth: this.client });
-    console.log("[initWithToken] Credentials set");
+    console.log("[Init Google with token] Credentials set");
     // console.log(this.client.credentials);
   }
 

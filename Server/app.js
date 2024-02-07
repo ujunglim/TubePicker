@@ -11,6 +11,7 @@ import fs from "fs";
 import folderRouter from "./routes/folderRouter.js";
 import { fileURLToPath } from "url";
 import jwt from "jsonwebtoken";
+import { verifyToken } from "./middleware/auth.js";
 
 // Init Constants
 const PORT = 9090;
@@ -68,7 +69,7 @@ app.get("/google/send_auth_code", async function (req, res) {
   res.cookie("userPic", picture);
   // 로그인 성공하면 jwt토큰을 클라이언트한테 발급
   const jwtToken = jwt.sign({ id: id }, process.env.JWT_SECRET);
-  res.cookie("jwtToken", jwtToken);
+  res.cookie("jwt", jwtToken);
 
   const env = process.env.NODE_ENV.trim();
   console.log(`========= Server is in [${env}] ==========`);
@@ -92,7 +93,8 @@ app.post("/api/plalist", async function (req, res) {
   }
 });
 
-app.post("/api/likedlist", async (req, res) => {
+app.post("/api/likedlist", verifyToken, async (req, res) => {
+  console.log(req.id, "======____");
   try {
     const { likedList, nextPageToken } =
       // await googleAuthClientInstance.getUserLikedList(req.body.prevPageToken);

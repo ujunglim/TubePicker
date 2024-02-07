@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios from 'axios'; 
+import getCookies from '../utils/getCookies';
 
 const getBaseUrl = () => {
   let url;
@@ -17,7 +18,15 @@ const getBaseUrl = () => {
 const api: any = axios.create(
   {
     baseURL: getBaseUrl()
+    // baseURL: 'http://localhost:9090' // 로컬에서 dev할때
   }
 )
+// AxiosRequestConfig
+api.interceptors.request.use((config: any) => {
+  const cookie = getCookies();
+  config.headers.Authorization = cookie.jwt;
+  return config;
+})
+
 
 export default api;
