@@ -68,8 +68,50 @@ app.get("/google/send_auth_code", async function (req, res) {
   res.cookie("userName", name);
   res.cookie("userPic", picture);
   // 로그인 성공하면 jwt토큰을 클라이언트한테 발급
-  const jwtToken = jwt.sign({ id: id }, process.env.JWT_SECRET);
+  const jwtToken = jwt.sign({ email }, process.env.JWT_SECRET);
   res.cookie("jwt", jwtToken);
+
+  // ============== DB ==============
+  // 새로운 user 추가
+  db.query(
+    "SELECT COUNT(*) AS count FROM user WHERE email = ?",
+    [email],
+    (err, rows) => {
+      if (err) {
+        console.error("Failed to execute query: ", err);
+        return;
+      }
+
+      const count = rows[0].count;
+
+      if (count > 0) {
+        console.log(`EMAIL ${email} exists in the table.`);
+      } else {
+        console.log(`EMAIL ${email} does not exist in the table.`);
+
+        // 존재하지 않는 새로운 유저 추가
+        db.query(
+          "INSERT INTO user (email) VALUES (?)",
+          [email],
+          (err, result) => {
+            if (err) {
+              console.error("Failed to insert user: ", err);
+              return;
+            }
+            console.log("===== User added successfully ======");
+          }
+        );
+      }
+    }
+  );
+
+  db.query("SELECT * FROM user", (err, rows) => {
+    if (err) {
+      console.error("Failed to read table: ", err);
+      return;
+    }
+    console.log("Table data:", rows);
+  });
 
   const env = process.env.NODE_ENV.trim();
   console.log(`========= Server is in [${env}] ==========`);
@@ -94,7 +136,7 @@ app.post("/api/plalist", async function (req, res) {
 });
 
 app.post("/api/likedlist", verifyToken, async (req, res) => {
-  console.log(req.id, "======____");
+  console.log(req.email, "======____");
   try {
     const { likedList, nextPageToken } =
       // await googleAuthClientInstance.getUserLikedList(req.body.prevPageToken);

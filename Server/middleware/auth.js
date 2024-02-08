@@ -10,7 +10,7 @@ export const verifyToken = (req, res, next) => {
       token = token.slice(7, token.length).trimLeft();
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET); // 토큰 검증
-    req.id = decoded.id;
+    req.email = decoded.email;
     next();
   } catch (err) {
     res.status(500).json({ error: err.message });
