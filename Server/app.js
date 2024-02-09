@@ -13,7 +13,6 @@ import { fileURLToPath } from "url";
 import jwt from "jsonwebtoken";
 import { verifyToken } from "./middleware/auth.js";
 import bodyParser from "body-parser";
-import setDBConfig from "./db.js";
 import db from "./db.js";
 
 // Init Constants
@@ -153,29 +152,9 @@ app.get("/likedlist", verifyToken, async (req, res) => {
 });
 
 // =========== ROUTES ===========
-app.get("/folder", verifyToken, (req, res) => {
-  const sql = "SELECT * FROM folder";
-  db.query(sql, (err, data) => {
-    if (err) return res.json("error");
-    return res.json(data);
-  });
-});
-
-app.post("/folder", verifyToken, (req, res) => {
-  const { name } = req.body;
-  db.query(
-    "INSERT INTO folder (name, subList) VALUES (?, JSON_OBJECT())",
-    [name],
-    (err, result) => {
-      if (err) {
-        console.error("Failed to insert user: ", err);
-        return;
-      }
-      console.log("===== Folder added successfully ======");
-    }
-  );
-  return res.status(200).send();
-});
+app.use("/folder", folderRouter);
+// app.use(notFound);
+// app.use(handleError);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/../Client/build", "index.html"));
@@ -195,11 +174,6 @@ if (environment === "pro") {
   };
   httpsServer = https.createServer(sslKeys, app);
 }
-
-// =========== ROUTES ===========
-app.use("/folder", folderRouter);
-// app.use(notFound);
-// app.use(handleError);
 
 if (environment === "pro") {
   httpsServer.listen(443, () => {

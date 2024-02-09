@@ -21,14 +21,6 @@ if (environment === "dev") {
     password: process.env.MYSQL_PWD,
     database: process.env.MYSQL_DB,
   };
-
-  // // SSL 인증서 키
-  // const sslKeys = {
-  //   ca: fs.readFileSync("/etc/letsencrypt/live/ujung.link/fullchain.pem"),
-  //   key: fs.readFileSync("/etc/letsencrypt/live/ujung.link/privkey.pem"),
-  //   cert: fs.readFileSync("/etc/letsencrypt/live/ujung.link/cert.pem"),
-  // };
-  // httpsServer = https.createServer(sslKeys, app);
 }
 
 // Connect to MySQL
