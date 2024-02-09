@@ -4,7 +4,7 @@ import cors from "cors";
 import GoogleAuthClient from "./google_utils.js";
 import session from "express-session";
 import cryptoModule from "crypto";
-import mysql from "mysql2";
+// import mysql from "mysql2";
 import dotenv from "dotenv";
 import https from "https";
 import fs from "fs";
@@ -13,6 +13,8 @@ import { fileURLToPath } from "url";
 import jwt from "jsonwebtoken";
 import { verifyToken } from "./middleware/auth.js";
 import bodyParser from "body-parser";
+import setDBConfig from "./db.js";
+import db from "./db.js";
 
 // Init Constants
 const PORT = 9090;
@@ -151,7 +153,6 @@ app.get("/likedlist", verifyToken, async (req, res) => {
 });
 
 // =========== ROUTES ===========
-// app.use("/folder", folderRouter);
 app.get("/folder", verifyToken, (req, res) => {
   const sql = "SELECT * FROM folder";
   db.query(sql, (err, data) => {
@@ -180,30 +181,12 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/../Client/build", "index.html"));
 });
 
+let httpsServer;
+
 // ========= DATABASE ===========
 const environment = process.argv[2];
-// environment dev, pro판단
-if (!environment) {
-  console.log("Invalid Argument:", environment);
-}
-
-let dbSetting = null;
-let httpsServer;
-if (environment === "dev") {
-  dbSetting = {
-    host: process.env.AWS_DOMAIN,
-    user: process.env.MYSQL_EXTERNAL_USER,
-    password: process.env.MYSQL_EXTERNAL_PWD,
-    database: process.env.MYSQL_EXTERNAL_DB,
-  };
-} else if (environment === "pro") {
-  dbSetting = {
-    host: "127.0.0.1",
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PWD,
-    database: process.env.MYSQL_DB,
-  };
-
+// environment pro이면 ssl, https 설정
+if (environment === "pro") {
   // SSL 인증서 키
   const sslKeys = {
     ca: fs.readFileSync("/etc/letsencrypt/live/ujung.link/fullchain.pem"),
@@ -213,24 +196,11 @@ if (environment === "dev") {
   httpsServer = https.createServer(sslKeys, app);
 }
 
-// Connect to MySQL
-
-console.log("[environment] ", environment, dbSetting);
-const db = mysql.createPool(dbSetting); // 요청이 끝난 후에 자동으로 반환되고 재사용된다
-
-db.getConnection((err) => {
-  if (err) {
-    throw err;
-  }
-  console.log("MySQL connected");
-});
-
 // =========== ROUTES ===========
-// app.use("/folder", folderRouter);
+app.use("/folder", folderRouter);
 // app.use(notFound);
 // app.use(handleError);
 
-console.log("=============", environment, "============");
 if (environment === "pro") {
   httpsServer.listen(443, () => {
     console.log("[PRO]Listening on 443");
