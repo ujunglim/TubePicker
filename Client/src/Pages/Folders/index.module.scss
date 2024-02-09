@@ -1,9 +1,35 @@
+@import '../../variables.scss';
+
 .container {
   width: 100%;
 
   .createBtn {
     width: 150px;
     margin-bottom: 2rem;
+  }
+
+  .sublist {
+    display: flex;
+    align-items: center;
+    padding: .5rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      background-color: $grey-light-color;
+    }
+
+    input {
+      cursor: pointer;
+    }
+
+    .user_profile {
+      width: 30px;
+      height: 30px;
+      border-radius: 3rem;
+      overflow: hidden;
+      margin: 0 0.5rem;
+    }
   }
 }
 

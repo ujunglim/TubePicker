@@ -111,6 +111,26 @@ class GoogleAuthClient {
     });
     return { likedList, nextPageToken: response.data.nextPageToken };
   }
+
+  async getSubscriptionList() {
+    const option = {
+      part: "snippet",
+      maxResults: 50,
+      mine: true,
+    };
+    const response = await this.youtube.subscriptions.list(option);
+
+    const subList = response.data.items.map((item) => {
+      const { title, thumbnails } = item.snippet;
+
+      return {
+        id: item.id,
+        name: title,
+        img: thumbnails.default.url,
+      };
+    });
+    return { subList };
+  }
 }
 
 export default GoogleAuthClient;

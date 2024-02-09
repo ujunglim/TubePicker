@@ -151,6 +151,16 @@ app.get("/likedlist", verifyToken, async (req, res) => {
   }
 });
 
+app.get("/subscriptionList", verifyToken, async (req, res) => {
+  try {
+    const { subList } = await googleAuthClientInstance.getSubscriptionList();
+    res.json({ subList });
+  } catch (error) {
+    console.error("Error retrieving sub list:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 // =========== ROUTES ===========
 app.use("/folder", folderRouter);
 // app.use(notFound);
