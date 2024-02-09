@@ -12,6 +12,7 @@ import folderRouter from "./routes/folderRouter.js";
 import { fileURLToPath } from "url";
 import jwt from "jsonwebtoken";
 import { verifyToken } from "./middleware/auth.js";
+import bodyParser from "body-parser";
 
 // Init Constants
 const PORT = 9090;
@@ -21,6 +22,7 @@ dotenv.config(); // Load environment variables from .env file
 // Setting up Server
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json());
 app.use(
   session({
     secret: cryptoModule.randomUUID(), // session을 암호화하고 보안을 강화하기 위한 키
@@ -91,7 +93,7 @@ app.get("/google/send_auth_code", async function (req, res) {
 
         // 존재하지 않는 새로운 유저 추가
         db.query(
-          "INSERT INTO user (email) VALUES (?)",
+          "INSERT INTO user (email, folderIdList) VALUES (?, JSON_OBJECT())",
           [email],
           (err, result) => {
             if (err) {
@@ -135,7 +137,7 @@ app.post("/api/plalist", async function (req, res) {
   }
 });
 
-app.post("/api/likedlist", verifyToken, async (req, res) => {
+app.get("/likedlist", verifyToken, async (req, res) => {
   console.log(req.email, "======____");
   try {
     const { likedList, nextPageToken } =
@@ -150,12 +152,28 @@ app.post("/api/likedlist", verifyToken, async (req, res) => {
 
 // =========== ROUTES ===========
 // app.use("/folder", folderRouter);
-app.post("/folders", (req, res) => {
-  const sql = "SELECT * FROM folders";
+app.get("/folder", verifyToken, (req, res) => {
+  const sql = "SELECT * FROM folder";
   db.query(sql, (err, data) => {
     if (err) return res.json("error");
     return res.json(data);
   });
+});
+
+app.post("/folder", verifyToken, (req, res) => {
+  const { name } = req.body;
+  db.query(
+    "INSERT INTO folder (name, subList) VALUES (?, JSON_OBJECT())",
+    [name],
+    (err, result) => {
+      if (err) {
+        console.error("Failed to insert user: ", err);
+        return;
+      }
+      console.log("===== Folder added successfully ======");
+    }
+  );
+  return res.status(200).send();
 });
 
 app.get("*", (req, res) => {
@@ -208,7 +226,7 @@ db.getConnection((err) => {
 });
 
 // =========== ROUTES ===========
-app.use("/folder", folderRouter);
+// app.use("/folder", folderRouter);
 // app.use(notFound);
 // app.use(handleError);
 

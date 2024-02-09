@@ -50,14 +50,14 @@ const Home = () => {
   }, [checkIntersect, defaultOption]);
 
   const getPlaylist = async () => {
-    const response = await api.post("/api/plalist");
+    const response = await api.post("/plalist");
     setPlaylists(response.data);
   };
 
   const getLikedList = async () => {
     const {
       data: { likedList, nextPageToken },
-    } = await api.post("/api/likedlist", {
+    } = await api.get("/likedlist", {
       prevPageToken: sessionStorage.getItem("likedListPageToken"),
     }); // todo prevPageToken
 

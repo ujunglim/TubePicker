@@ -1,15 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../../Component/Modal";
 import { setModalPosition } from "../../store/slices/app";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
-import axios from "axios";
 import api from "../../api";
+import FolderRow from "../../Component/FolderRow";
+import styles from "./index.module.scss";
 
 const Folders = () => {
-  const [folderList, setFolderList] = useState([]);
   const [inputValue, setInputValue] = useState<string>("");
+  const [folderList, setFolderList] = useState([]);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    getFolderList();
+  }, []);
+
+  const getFolderList = async () => {
+    const { data } = await api.get("/folder");
+    setFolderList(data);
+  };
+
   const openModal = () => {
     dispatch(setModalPosition(window.scrollY));
   };
@@ -39,22 +50,24 @@ const Folders = () => {
       return;
     }
     // create folder
-    const response = await api.post(
-      `${process.env.REACT_APP_AWS_INSTANCE}/folder/create`,
-      {
-        name: inputValue,
-      }
-    );
-
+    await api.post("/folder", {
+      name: inputValue,
+    });
+    getFolderList();
     toast.info("와우 폴더생성을 성공했습니다!");
     handleClose();
   };
 
   return (
-    <>
+    <div className={styles.container}>
       <ToastContainer />
       <div style={{ display: "flex", flexFlow: "column" }}>
-        <button onClick={openModal}>새 폴더 생성</button>
+        <button onClick={openModal} className={styles.createBtn}>
+          새 폴더 생성
+        </button>
+        {folderList.map(({ id, name, subList }) => (
+          <FolderRow id={id} name={name} subList={subList} />
+        ))}
         <Modal
           title={"새 폴더를 생성하시겠습니까?"}
           children={content}
@@ -62,7 +75,7 @@ const Folders = () => {
           handleClose={handleClose}
         />
       </div>
-    </>
+    </div>
   );
 };
 
