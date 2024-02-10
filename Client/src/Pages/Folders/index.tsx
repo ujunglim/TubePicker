@@ -23,7 +23,7 @@ const Folders = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [subList, setSubList] = useState<Sub[]>([]);
   const [folderList, setFolderList] = useState([]);
-  const [selectedSub, setSelectedSub] = useState(new Set());
+  const [selectedSub, setSelectedSub] = useState<any>({});
   const [modalStep, setModalStep] = useState<Step>(Step.FIRST);
   const dispatch = useDispatch();
 
@@ -62,13 +62,20 @@ const Folders = () => {
       {subList.map((sub: Sub) => {
         return (
           <div
+            key={sub.id}
             id={sub.id}
             className={styles.sublist}
+            datatype={sub.name}
             onClick={(e) => handleSelectionSub(e)}
           >
-            <input type="checkbox" value={sub.id} />
+            <input
+              type="checkbox"
+              datatype={sub.id}
+              value={sub.name}
+              checked={selectedSub[sub.name]}
+            />
             <div className={styles.user_profile}>
-              <img src={sub.img} alt="channel img" />
+              <img src={sub.img} alt="channel img" style={{ width: "30px" }} />
             </div>
             <div>{sub.name}</div>
           </div>
@@ -78,16 +85,22 @@ const Folders = () => {
   );
 
   const handleSelectionSub = (e: any) => {
-    const selectedId = e.target.value;
-    if (selectedSub.has(selectedId)) {
-      selectedSub.delete(selectedId);
+    const target = e.currentTarget;
+    const name = target.getAttribute("datatype");
+    const id = target.id;
+    const newSelection = { ...selectedSub };
+    if (selectedSub[name]) {
+      delete newSelection[name];
     } else {
-      selectedSub.add(selectedId);
+      newSelection[name] = id;
     }
+    setSelectedSub(newSelection);
   };
 
   const handleClose = () => {
     setInputValue("");
+    setModalStep(Step.FIRST);
+    setSelectedSub({});
     dispatch(setModalPosition(undefined));
   };
 
@@ -101,20 +114,14 @@ const Folders = () => {
   };
 
   const createFolder = async () => {
-    // valid
-    if (inputValue === "") {
-      toast.error("폴더 이름을 입력해주세요");
-      return;
-    }
     // create folder
     await api.post("/folder", {
       name: inputValue,
-      // list: ,
+      list: selectedSub,
     });
     getFolderList();
     toast.info("와우 폴더생성을 성공했습니다!");
     handleClose();
-    setModalStep(Step.FIRST);
   };
 
   return (
