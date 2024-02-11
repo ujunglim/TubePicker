@@ -4,7 +4,6 @@ import cors from "cors";
 import GoogleAuthClient from "./google_utils.js";
 import session from "express-session";
 import cryptoModule from "crypto";
-// import mysql from "mysql2";
 import dotenv from "dotenv";
 import https from "https";
 import fs from "fs";
@@ -139,7 +138,7 @@ app.post("/api/plalist", async function (req, res) {
 });
 
 app.get("/likedlist", verifyToken, async (req, res) => {
-  console.log(req.email, "======____");
+  console.log(`got liked list of ${req.email}`);
   try {
     const { likedList, nextPageToken } =
       // await googleAuthClientInstance.getUserLikedList(req.body.prevPageToken);

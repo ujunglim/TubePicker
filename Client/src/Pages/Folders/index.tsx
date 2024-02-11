@@ -114,7 +114,6 @@ const Folders = () => {
   };
 
   const createFolder = async () => {
-    // create folder
     await api.post("/folder", {
       name: inputValue,
       list: selectedSub,
@@ -131,7 +130,7 @@ const Folders = () => {
         <button onClick={openModal} className={styles.createBtn}>
           새 폴더 생성
         </button>
-        {folderList.map(({ id, name, subList }) => (
+        {folderList?.map(({ id, name, subList }) => (
           <FolderRow id={id} name={name} subList={subList} />
         ))}
         <Modal
