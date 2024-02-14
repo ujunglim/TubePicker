@@ -123,6 +123,11 @@ const Folders = () => {
     handleClose();
   };
 
+  const deleteFolder = async (id: string) => {
+    await api.delete("/folder", { data: { id } });
+    getFolderList();
+  };
+
   return (
     <div className={styles.container}>
       <ToastContainer />
@@ -131,7 +136,12 @@ const Folders = () => {
           새 폴더 생성
         </button>
         {folderList?.map(({ id, name, subList }) => (
-          <FolderRow id={id} name={name} subList={subList} />
+          <FolderRow
+            id={id}
+            name={name}
+            subList={subList}
+            handleDelete={deleteFolder}
+          />
         ))}
         <Modal
           title={
