@@ -10,80 +10,47 @@ export const createFolder = async (req, res, next) => {
   try {
     const { name, list } = req.body;
     const jsonList = JSON.stringify(list);
-    db.query(
+
+    // add new folderList to folder table
+    const result1 = await db.myQuery(
       "INSERT INTO folder (name, subList) VALUES (?, ?)",
-      [name, jsonList],
-      (err, result) => {
-        if (err) {
-          console.error("Failed to insert user: ", err);
-          return;
-        }
-        const insertedId = result.insertId;
-        // const oldFolderIdList = db.query(
-        //   "select folderIdList from user where email = ?",
-        //   [email],
-        //   (err, result) => {
-        //     if (err) {
-        //       console.error(err);
-        //     }
-        //   }
-        // );
-        // console.log(oldFolderIdList);
-        console.log(`===== Folder id ${insertedId} added successfully ======`);
-        // insertedId를 user table의 folderIdList에 추가
-        const newJson = JSON.stringify({ insertedId: insertedId });
-        const setQuery =
-          "UPDATE user SET folderIdList = JSON_MERGE(folderIdList, ?) WHERE email = ?";
-        db.query(setQuery, [newJson, email], (err, result) => {
-          if (err) {
-            console.log(`[Error on adding folderId]`, err);
-            return;
-          }
-        });
-        console.log("////////////");
-      }
+      [name, jsonList]
     );
-    return res.status(201).json({ message: "folder has been created" });
+    // add folderId to user table from the previous result1
+    const setQuery =
+      "UPDATE user SET folderIdList = JSON_MERGE(folderIdList, ?) WHERE email = ?";
+    const newJson = JSON.stringify({ insertedId: result1.insertId });
+    await db.myQuery(setQuery, [newJson, email]);
+    console.log("folder has been created");
+
+    // get new folder list
+    getFolderList(req, res);
   } catch (err) {
-    res.status(409).json({ message: err.message });
+    res.status(409).json({ message: err });
   }
 };
 
 /**
- * @description Read all folder
+ * @description Read folder list
  * @route GET /folder
  */
 export const getFolderList = async (req, res) => {
   const { email } = req;
   try {
     const folderIdListSql = "SELECT folderIdList FROM user where email = ? ";
-    db.query(folderIdListSql, [email], (err, data) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json("error");
-      }
+    const result1 = await db.myQuery(folderIdListSql, [email]);
+    const folderIdList = result1[0].folderIdList;
+    const insertedIdList = folderIdList.insertedId;
+    if (!insertedIdList) {
+      return res.status(200).json([]);
+    }
+    const folderIds = Array.isArray(insertedIdList)
+      ? insertedIdList.join(",")
+      : insertedIdList;
+    const folderListSql = `SELECT * FROM folder WHERE id IN (${folderIds})`;
 
-      const result = data[0].folderIdList;
-      if (result === undefined) {
-        return res.status(200).json([]);
-      }
-
-      console.log("_____________ ", result);
-
-      const folderIdList = result.insertedId;
-      const folderIds = Array.isArray(folderIdList)
-        ? folderIdList.join(",")
-        : folderIdList;
-      const folderListSql = `SELECT * FROM folder WHERE id IN (${folderIds})`;
-      db.query(folderListSql, [folderIds], (err, data) => {
-        if (err) {
-          console.error(err);
-          return res.json("error to get folder list");
-        }
-        console.log("get new list", data);
-        return res.status(200).json(data);
-      });
-    });
+    const result2 = await db.myQuery(folderListSql, [folderIds]);
+    return res.status(200).json(result2);
   } catch (err) {
     res.status(409).json({ message: err.message });
   }

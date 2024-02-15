@@ -33,4 +33,22 @@ db.getConnection((err) => {
   console.log("MySQL connected");
 });
 
+/**
+ *
+ * @param {*} query
+ * @param {*} param
+ * @returns promise
+ * @description adapter of db.query
+ */
+db.myQuery = (query, param) => {
+  return new Promise((resolve, reject) => {
+    db.query(query, param, (error, result) => {
+      if (error) {
+        return reject(error);
+      }
+      return resolve(result);
+    });
+  });
+};
+
 export default db;

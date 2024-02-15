@@ -114,11 +114,16 @@ const Folders = () => {
   };
 
   const createFolder = async () => {
-    await api.post("/folder", {
+    // try {} catch
+    if (!Object.keys(selectedSub).length) {
+      toast.error("채널을 1개 이상 선택해주세요");
+      return;
+    }
+    const { data } = await api.post("/folder", {
       name: inputValue,
       list: selectedSub,
     });
-    getFolderList();
+    setFolderList(data);
     toast.info("와우 폴더생성을 성공했습니다!");
     handleClose();
   };
