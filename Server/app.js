@@ -93,7 +93,7 @@ app.get("/google/send_auth_code", async function (req, res) {
 
         // 존재하지 않는 새로운 유저 추가
         db.query(
-          "INSERT INTO user (email, folderIdList) VALUES (?, JSON_OBJECT())",
+          "INSERT INTO user (email, folderIdList) VALUES (?, JSON_ARRAY())",
           [email],
           (err, result) => {
             if (err) {
