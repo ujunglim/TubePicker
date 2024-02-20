@@ -87,10 +87,8 @@ app.get("/google/send_auth_code", async function (req, res) {
       const count = rows[0].count;
 
       if (count > 0) {
-        console.log(`EMAIL ${email} exists in the table.`);
+        console.log(`user ${email} already exists`);
       } else {
-        console.log(`EMAIL ${email} does not exist in the table.`);
-
         // 존재하지 않는 새로운 유저 추가
         db.query(
           "INSERT INTO user (email, folderIdList) VALUES (?, JSON_ARRAY())",
@@ -112,7 +110,6 @@ app.get("/google/send_auth_code", async function (req, res) {
       console.error("Failed to read table: ", err);
       return;
     }
-    console.log("Table data:", rows);
   });
 
   const env = process.env.NODE_ENV.trim();

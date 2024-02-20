@@ -121,10 +121,14 @@ class GoogleAuthClient {
     const response = await this.youtube.subscriptions.list(option);
 
     const subList = response.data.items.map((item) => {
-      const { title, thumbnails } = item.snippet;
+      const {
+        title,
+        thumbnails,
+        resourceId: { channelId },
+      } = item.snippet;
 
       return {
-        id: item.id,
+        id: channelId,
         name: title,
         img: thumbnails.default.url,
       };
@@ -132,11 +136,11 @@ class GoogleAuthClient {
     return { subList };
   }
 
-  async getVideoOfChannel() {
+  async getVideoOfChannel(channelId) {
     const option = {
       part: "snippet",
-      maxResults: 20,
-      channelId: "UCw4izi2fsJzFltt3EbmokWA",
+      maxResults: 10,
+      channelId,
     };
     const response = await this.youtube.search.list(option);
     const result = [];

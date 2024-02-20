@@ -87,6 +87,20 @@ export const deleteFolder = async (req, res, next) => {
  * @route GET /folder/detail/:id
  */
 export const getVideoOfaChannel = async (req, res) => {
-  const data = await googleAuthClientInstance.getVideoOfChannel();
-  res.status(200).json({ list: data });
+  const folderId = req.params.id;
+  const { subList } = (
+    await db.myQuery("SELECT subList FROM folder WHERE id = ?", [folderId])
+  )[0];
+  const subListArr = Object.values(subList);
+  const allSubListArr = [];
+
+  for (const subId of subListArr) {
+    try {
+      const data = await googleAuthClientInstance.getVideoOfChannel(subId);
+      allSubListArr.push(...data);
+    } catch (err) {
+      console.log("[Error] Getting video of channel");
+    }
+  }
+  res.status(200).json({ list: allSubListArr });
 };
