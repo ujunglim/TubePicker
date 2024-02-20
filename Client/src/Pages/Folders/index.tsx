@@ -7,6 +7,7 @@ import api from "../../api";
 import FolderRow from "../../Component/FolderRow";
 import styles from "./index.module.scss";
 import ScrollContainer from "../../Component/ScrollContainer";
+import { useNavigate } from "react-router";
 
 enum Step {
   FIRST = "first",
@@ -26,6 +27,7 @@ const Folders = () => {
   const [selectedSub, setSelectedSub] = useState<any>({});
   const [modalStep, setModalStep] = useState<Step>(Step.FIRST);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     getFolderList();
@@ -133,6 +135,10 @@ const Folders = () => {
     getFolderList();
   };
 
+  const detailFolder = async (id: string) => {
+    navigate(`/folders/detail/${id}`);
+  };
+
   return (
     <div className={styles.container}>
       <ToastContainer />
@@ -145,6 +151,7 @@ const Folders = () => {
             id={id}
             name={name}
             subList={subList}
+            handleDetail={detailFolder}
             handleDelete={deleteFolder}
           />
         ))}

@@ -35,7 +35,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 app.use(express.static(path.join(__dirname, "/../Client/build"))); // js, css등을 express에서 접근가능하게 한다.
 
-const googleAuthClientInstance = new GoogleAuthClient();
+export const googleAuthClientInstance = new GoogleAuthClient();
 
 // check server is opened or not
 app.get("/ping", (req, res) => {

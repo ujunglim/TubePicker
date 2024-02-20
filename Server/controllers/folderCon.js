@@ -1,3 +1,4 @@
+import { googleAuthClientInstance } from "../app.js";
 import db from "../db.js";
 
 /**
@@ -80,4 +81,12 @@ export const deleteFolder = async (req, res, next) => {
     }
     res.status(200).send();
   });
+};
+/**
+ * @description get videos of a folder
+ * @route GET /folder/detail/:id
+ */
+export const getVideoOfaChannel = async (req, res) => {
+  const data = await googleAuthClientInstance.getVideoOfChannel();
+  res.status(200).json({ list: data });
 };

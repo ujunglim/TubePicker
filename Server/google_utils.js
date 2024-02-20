@@ -131,6 +131,29 @@ class GoogleAuthClient {
     });
     return { subList };
   }
+
+  async getVideoOfChannel() {
+    const option = {
+      part: "snippet",
+      maxResults: 20,
+      channelId: "UCw4izi2fsJzFltt3EbmokWA",
+    };
+    const response = await this.youtube.search.list(option);
+    const result = [];
+
+    response.data.items.map((item) => {
+      const { title, description, channelTitle, publishedAt, thumbnails } =
+        item.snippet;
+      result.push({
+        title,
+        description,
+        channelTitle,
+        publishedAt,
+        thumbnails,
+      });
+    });
+    return result;
+  }
 }
 
 export default GoogleAuthClient;
