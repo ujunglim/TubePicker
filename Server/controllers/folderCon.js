@@ -86,7 +86,7 @@ export const deleteFolder = async (req, res, next) => {
  * @description get videos of a folder
  * @route GET /folder/detail/:id
  */
-export const getVideoOfaChannel = async (req, res) => {
+export const getVideoOfFolder = async (req, res) => {
   const folderId = req.params.id;
   const { subList } = (
     await db.myQuery("SELECT subList FROM folder WHERE id = ?", [folderId])
@@ -96,11 +96,13 @@ export const getVideoOfaChannel = async (req, res) => {
 
   for (const subId of subListArr) {
     try {
-      const data = await googleAuthClientInstance.getVideoOfChannel(subId);
+      const data = await googleAuthClientInstance.getVideoOfAChannel(subId);
       allSubListArr.push(...data);
     } catch (err) {
       console.log("[Error] Getting video of channel");
     }
   }
+  // 시간순으로 정렬
+  allSubListArr.sort((a, b) => b.publishedAt - a.publishedAt);
   res.status(200).json({ list: allSubListArr });
 };

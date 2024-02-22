@@ -136,11 +136,12 @@ class GoogleAuthClient {
     return { subList };
   }
 
-  async getVideoOfChannel(channelId) {
+  async getVideoOfAChannel(channelId) {
     const option = {
       part: "snippet",
-      maxResults: 10,
+      maxResults: 20,
       channelId,
+      order: "date",
     };
     const response = await this.youtube.search.list(option);
     const result = [];
@@ -149,6 +150,7 @@ class GoogleAuthClient {
       const { title, description, channelTitle, publishedAt, thumbnails } =
         item.snippet;
       result.push({
+        id: item.id.videoId,
         title,
         description,
         channelTitle,
