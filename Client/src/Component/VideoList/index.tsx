@@ -5,6 +5,7 @@ import { Video } from "../../types";
 import ModalVideo from "../ModalVideo";
 import { appManage, setIsLoggedIn } from "../../store/slices/app";
 import { useSelector, useDispatch } from "react-redux";
+import Modal, { ModalType } from "../Modal";
 
 interface Prop {
   list: Video[];
@@ -69,7 +70,11 @@ const VideoList: FC<Prop> = ({ list, fetchList }) => {
         Loading...
       </div>
       {selectedVideo && modalPosition !== undefined && (
-        <ModalVideo selectedVideo={selectedVideo} />
+        <Modal
+          type={ModalType.VIDEO}
+          title={selectedVideo.title}
+          id={selectedVideo.id}
+        />
       )}
     </div>
   );

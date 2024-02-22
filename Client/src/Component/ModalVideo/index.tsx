@@ -1,12 +1,21 @@
 import { FC } from "react";
 import styles from "./index.module.scss";
-import { Video } from "../../types";
 interface Prop {
-  selectedVideo: Video;
+  id?: string;
+  title: string;
+  channelTitle?: string;
+  description?: string;
+  publishedAt?: string;
+  thumbnails?: any;
 }
-const ModalVideo: FC<Prop> = ({ selectedVideo }) => {
-  const { id, title, channelTitle, description, publishedAt, thumbnails } =
-    selectedVideo;
+const ModalVideo: FC<Prop> = ({
+  id,
+  title,
+  channelTitle,
+  description,
+  publishedAt,
+  thumbnails,
+}) => {
   return (
     <iframe
       id={id}
