@@ -12,6 +12,7 @@
     display: flex;
     align-items: center;
     padding: .5rem;
+    width: 100%;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 
@@ -29,6 +30,19 @@
       border-radius: 3rem;
       overflow: hidden;
       margin: 0 0.5rem;
+    }
+  }
+
+  .secondContainer {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    width: 80%;
+    height: 375px;
+
+    .noMatch {
+      display: flex;
+      justify-content: center;
     }
   }
 }

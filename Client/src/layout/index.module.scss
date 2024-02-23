@@ -30,6 +30,13 @@ body {
 
     }
   }
+
+  input {
+    outline: none;
+    border: none;
+    border-bottom: 1px solid $grey-mid-color;
+    padding-bottom: .5rem;
+  }
 }
 
 .layout {

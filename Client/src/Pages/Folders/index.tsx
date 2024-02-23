@@ -21,7 +21,9 @@ interface Sub {
 }
 
 const Folders = () => {
-  const [inputValue, setInputValue] = useState<string>("");
+  const [inputFolder, setInputFolder] = useState<string>("");
+  const [inputChannel, setInputChannel] = useState<string>("");
+  const [allSubList, setAllSubList] = useState<Sub[]>([]);
   const [subList, setSubList] = useState<Sub[]>([]);
   const [folderList, setFolderList] = useState([]);
   const [selectedSub, setSelectedSub] = useState<any>({});
@@ -31,59 +33,87 @@ const Folders = () => {
 
   useEffect(() => {
     getFolderList();
-    getSubscriptionList();
+    getAllSubList();
   }, []);
 
   const getFolderList = async () => {
     const { data } = await api.get("/folder");
     setFolderList(data);
   };
-  const getSubscriptionList = async () => {
+  const getAllSubList = async () => {
     const { data } = await api.get("/subscriptionList");
+    setAllSubList(data.subList);
     setSubList(data.subList);
   };
   const openModal = () => {
     dispatch(setModalPosition(window.scrollY));
   };
 
-  const handleChange = (e: any) => {
-    setInputValue(e.target.value);
+  const handleSearch = (e: any) => {
+    const keyword = e.target.value.toLowerCase();
+    setInputChannel(keyword);
+
+    if (keyword !== "") {
+      const filteredSubList = allSubList.filter(({ name }) =>
+        name.toLowerCase().startsWith(keyword)
+      );
+      setSubList(filteredSubList);
+    } else {
+      setSubList(allSubList);
+    }
   };
 
   const firstContent = (
     <input
       type="text"
       placeholder="폴더 이름을 입력하세요"
-      value={inputValue}
-      onChange={handleChange}
+      value={inputFolder}
+      onChange={(e) => setInputFolder(e.target.value)}
     ></input>
   );
 
   const secondContent = (
-    <ScrollContainer>
-      {subList.map((sub: Sub) => {
-        return (
-          <div
-            key={sub.id}
-            id={sub.id}
-            className={styles.sublist}
-            datatype={sub.name}
-            onClick={(e) => handleSelectionSub(e)}
-          >
-            <input
-              type="checkbox"
-              datatype={sub.id}
-              value={sub.name}
-              checked={selectedSub[sub.name]}
-            />
-            <div className={styles.user_profile}>
-              <img src={sub.img} alt="channel img" style={{ width: "30px" }} />
-            </div>
-            <div>{sub.name}</div>
-          </div>
-        );
-      })}
-    </ScrollContainer>
+    <div className={styles.secondContainer}>
+      <input
+        type="search"
+        value={inputChannel}
+        placeholder="채널 이름을 입력해주세요"
+        onChange={handleSearch}
+        style={{ marginBottom: "1.5rem", width: "80%" }}
+      />
+      <ScrollContainer>
+        {subList.length ? (
+          subList.map((sub: Sub) => {
+            return (
+              <div
+                key={sub.id}
+                id={sub.id}
+                className={styles.sublist}
+                datatype={sub.name}
+                onClick={(e) => handleSelectionSub(e)}
+              >
+                <input
+                  type="checkbox"
+                  datatype={sub.id}
+                  value={sub.name}
+                  checked={selectedSub[sub.name]}
+                />
+                <div className={styles.user_profile}>
+                  <img
+                    src={sub.img}
+                    alt="channel img"
+                    style={{ width: "30px" }}
+                  />
+                </div>
+                <div>{sub.name}</div>
+              </div>
+            );
+          })
+        ) : (
+          <div className={styles.noMatch}>매치되는 채널이 없습니다</div>
+        )}
+      </ScrollContainer>
+    </div>
   );
 
   const handleSelectionSub = (e: any) => {
@@ -100,7 +130,8 @@ const Folders = () => {
   };
 
   const handleClose = () => {
-    setInputValue("");
+    setInputFolder("");
+    setInputChannel("");
     setModalStep(Step.FIRST);
     setSelectedSub({});
     dispatch(setModalPosition(undefined));
@@ -108,7 +139,7 @@ const Folders = () => {
 
   const setFolderName = async () => {
     // valid
-    if (inputValue === "") {
+    if (inputFolder === "") {
       toast.error("폴더 이름을 입력해주세요");
       return;
     }
@@ -122,7 +153,7 @@ const Folders = () => {
       return;
     }
     const { data } = await api.post("/folder", {
-      name: inputValue,
+      name: inputFolder,
       list: selectedSub,
     });
     setFolderList(data);

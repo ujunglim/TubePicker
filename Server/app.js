@@ -91,7 +91,7 @@ app.get("/google/send_auth_code", async function (req, res) {
       } else {
         // 존재하지 않는 새로운 유저 추가
         db.query(
-          "INSERT INTO user (email, folderIdList) VALUES (?, JSON_ARRAY())",
+          "INSERT INTO user (email, folderIdList, subList) VALUES (?, JSON_ARRAY(), JSON_OBJECT())",
           [email],
           (err, result) => {
             if (err) {
@@ -104,13 +104,6 @@ app.get("/google/send_auth_code", async function (req, res) {
       }
     }
   );
-
-  db.query("SELECT * FROM user", (err, rows) => {
-    if (err) {
-      console.error("Failed to read table: ", err);
-      return;
-    }
-  });
 
   const env = process.env.NODE_ENV.trim();
   console.log(`========= Server is in [${env}] ==========`);
@@ -148,8 +141,19 @@ app.get("/likedlist", verifyToken, async (req, res) => {
 });
 
 app.get("/subscriptionList", verifyToken, async (req, res) => {
+  const { email } = req;
+
   try {
     const { subList } = await googleAuthClientInstance.getSubscriptionList();
+    const obj = {};
+    subList.forEach(({ id, name, img }) => {
+      obj[name] = {
+        id,
+        img,
+      };
+    });
+    const qry = "UPDATE user SET subList = ? WHERE email = ?";
+    db.myQuery(qry, [JSON.stringify(obj), email]);
     res.json({ subList });
   } catch (error) {
     console.error("Error retrieving sub list:", error.message);
