@@ -23,7 +23,7 @@ const FolderRow: FC<Prop> = ({
         <FaFolderOpen color="lightGrey" style={{ marginRight: "1rem" }} />
         {name}
       </div>
-      <span onClick={() => handleDelete(id)}>delete</span>
+      <span onClick={(e) => handleDelete(e, id)}>delete</span>
     </div>
   );
 };

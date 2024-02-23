@@ -34,11 +34,10 @@ db.getConnection((err) => {
 });
 
 /**
- *
- * @param {*} query
- * @param {*} param
+ * db.query 어답터
+ * @param query
+ * @param param
  * @returns promise
- * @description adapter of db.query
  */
 db.myQuery = (query, param) => {
   return new Promise((resolve, reject) => {

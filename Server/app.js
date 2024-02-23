@@ -74,36 +74,25 @@ app.get("/google/send_auth_code", async function (req, res) {
   res.cookie("jwt", jwtToken);
 
   // ============== DB ==============
-  // 새로운 user 추가
-  db.query(
-    "SELECT COUNT(*) AS count FROM user WHERE email = ?",
-    [email],
-    (err, rows) => {
-      if (err) {
-        console.error("Failed to execute query: ", err);
-        return;
-      }
+  // 구글 로그인
+  try {
+    // 새로운 user인지 확인
+    const result = await db.myQuery(
+      "SELECT COUNT(*) AS count FROM user WHERE email = ?",
+      [email]
+    );
+    const isNewUser = result[0].count === 0;
 
-      const count = rows[0].count;
-
-      if (count > 0) {
-        console.log(`user ${email} already exists`);
-      } else {
-        // 존재하지 않는 새로운 유저 추가
-        db.query(
-          "INSERT INTO user (email, folderIdList, subList) VALUES (?, JSON_ARRAY(), JSON_OBJECT())",
-          [email],
-          (err, result) => {
-            if (err) {
-              console.error("Failed to insert user: ", err);
-              return;
-            }
-            console.log("===== User added successfully ======");
-          }
-        );
-      }
+    // 새로운 user이면 db에 추가
+    if (isNewUser) {
+      await db.myQuery(
+        "INSERT INTO user (email, folderIdList, subList) VALUES (?, JSON_ARRAY(), JSON_OBJECT())",
+        [email]
+      );
     }
-  );
+  } catch (err) {
+    console.log(`[ERROR] log in`);
+  }
 
   const env = process.env.NODE_ENV.trim();
   console.log(`========= Server is in [${env}] ==========`);

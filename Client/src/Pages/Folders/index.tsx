@@ -161,7 +161,8 @@ const Folders = () => {
     handleClose();
   };
 
-  const deleteFolder = async (id: string) => {
+  const deleteFolder = async (e: any, id: string) => {
+    e.stopPropagation(); // 이벤트버블링 방지
     await api.delete("/folder", { data: { id } });
     getFolderList();
   };

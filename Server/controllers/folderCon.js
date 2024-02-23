@@ -62,25 +62,12 @@ export const deleteFolder = async (req, res, next) => {
   } = req;
   // delete folder id from folder list
   const deleteFolderSQL = `DELETE FROM folder WHERE id = ?`;
-  db.query(deleteFolderSQL, [id], (err) => {
-    if (err) {
-      console.error("error to delete folder", id);
-      return;
-    }
-  });
+  await db.myQuery(deleteFolderSQL, [id]);
   const qry = `UPDATE user
   SET folderIdList = JSON_REMOVE(
     folderIdList, replace(JSON_SEARCH(folderIdList, 'one', ?), '"', '')) WHERE email = ?`;
-  db.query(qry, [String(id), email], (err, result) => {
-    if (err) {
-      console.error("[error to edit folderidlist]", err);
-      res.status(500).send();
-    }
-    if (result) {
-      console.log("---result: ", result);
-    }
-    res.status(200).send();
-  });
+  await db.myQuery(qry, [String(id), email]);
+  res.status(200).send();
 };
 /**
  * @description get videos of a folder
@@ -102,7 +89,11 @@ export const getVideoOfFolder = async (req, res) => {
       console.log("[Error] Getting video of channel");
     }
   }
-  // 시간순으로 정렬
-  allSubListArr.sort((a, b) => b.publishedAt - a.publishedAt);
+  // 최신순으로 정렬
+  allSubListArr.sort((a, b) => {
+    const aTimestamp = new Date(a.publishedAt).getTime();
+    const bTimeStamp = new Date(b.publishedAt).getTime();
+    return bTimeStamp - aTimestamp;
+  });
   res.status(200).json({ list: allSubListArr });
 };
