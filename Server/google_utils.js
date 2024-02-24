@@ -31,7 +31,7 @@ class GoogleAuthClient {
     return authorizationUrl;
   }
 
-  async getAccessToken(authCode) {
+  async getGoogleAccessToken(authCode) {
     const res = await this.client.getToken(authCode);
     console.log("[Got Google AccessToken]");
     return res.tokens;
