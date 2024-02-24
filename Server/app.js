@@ -14,23 +14,17 @@ import { verifyToken } from "./middleware/auth.js";
 import bodyParser from "body-parser";
 import db from "./db.js";
 import userRouter from "./routes/userRouter.js";
+import cookieParser from "cookie-parser";
+import { getAccessToken, getRefreshToken } from "./util/jwt_util.js";
 
-// Init Constants
 const PORT = 9090;
 const app = express();
 dotenv.config(); // Load environment variables from .env file
 
-// Setting up Server
-app.use(cors());
+app.use(cors({ Credential: true })); // 쿠키사용
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(
-  session({
-    secret: cryptoModule.randomUUID(), // session을 암호화하고 보안을 강화하기 위한 키
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+app.use(cookieParser());
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -61,18 +55,29 @@ app.get("/google/send_auth_code", async function (req, res) {
     req.query.code
   );
   // TODO save the tokens for every session, use the session's token to restore the googleAuthClient later
-  req.session.token = accessToken; // Save the token to the session
+  // req.session.token = accessToken; // Save the token to the session
   await googleAuthClientInstance.initWithAccessToken(accessToken);
+  // 구글 서버로부터 사용자 정보 획득
   const { id, email, name, picture } =
     await googleAuthClientInstance.getUserInfo();
-  // console.log(id, email, name, picture);
   res.cookie("userid", id);
   res.cookie("userEmail", email);
   res.cookie("userName", name);
   res.cookie("userPic", picture);
-  // 로그인 성공하면 jwt토큰을 클라이언트한테 발급
-  const jwtToken = jwt.sign({ email }, process.env.JWT_SECRET);
-  res.cookie("jwt", jwtToken);
+
+  try {
+    // 로그인 성공하면 브라우저에 accessToken, refreshToken 발급
+    const accessToken = getAccessToken(id, email, name);
+    const refreshToken = getRefreshToken(id, email, name);
+
+    // 쿠키에 담아서 token전송
+    res.cookie("accessToken", accessToken, { secure: true, httpOnly: true }); // httpOnly true이면 js에서 쿠키에 접근불가
+    res.cookie("refreshToken", refreshToken, { secure: true, httpOnly: true });
+
+    // res.status(200).json({msg:"로그인 성공"});
+  } catch (err) {
+    res.status(500).json({ msg: "로그인 실패" });
+  }
 
   // ============== DB ==============
   // 구글 로그인
