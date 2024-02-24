@@ -54,7 +54,7 @@ const VideoList: FC<Prop> = ({ list, fetchList }) => {
 
   return (
     <div style={{ display: "flex", flexFlow: "column" }}>
-      <div className={styles.video_list} ref={videoListRef}>
+      <section className={styles.video_list} ref={videoListRef}>
         {list &&
           list.map((video: Video) => {
             return (
@@ -65,7 +65,7 @@ const VideoList: FC<Prop> = ({ list, fetchList }) => {
               />
             );
           })}
-      </div>
+      </section>
       <div ref={loaderRef} style={{ marginTop: "20px", textAlign: "center" }}>
         Loading...
       </div>

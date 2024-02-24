@@ -12,9 +12,9 @@ const SideBar = () => {
     navigate("/folders");
   };
   return (
-    <div className={styles.sidebar}>
+    <nav>
       {isLoggedIn && <SideTab title={"Folders"} handleClick={handleFolder} />}
-    </div>
+    </nav>
   );
 };
 

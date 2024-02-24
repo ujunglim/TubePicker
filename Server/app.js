@@ -13,6 +13,7 @@ import jwt from "jsonwebtoken";
 import { verifyToken } from "./middleware/auth.js";
 import bodyParser from "body-parser";
 import db from "./db.js";
+import userRouter from "./routes/userRouter.js";
 
 // Init Constants
 const PORT = 9090;
@@ -106,51 +107,8 @@ app.get("/google/send_auth_code", async function (req, res) {
   }
 });
 
-app.post("/api/plalist", async function (req, res) {
-  try {
-    const playlists = await googleAuthClientInstance.getUserPlaylist();
-    res.json(playlists);
-  } catch (error) {
-    console.error("Error retrieving video information:", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
-app.get("/likedlist", verifyToken, async (req, res) => {
-  console.log(`got liked list of ${req.email}`);
-  try {
-    const { likedList, nextPageToken } =
-      // await googleAuthClientInstance.getUserLikedList(req.body.prevPageToken);
-      await googleAuthClientInstance.getUserLikedList();
-    res.json({ likedList, nextPageToken }); // 그 다음 페이지토큰 전달
-  } catch (error) {
-    console.error("Error retrieving video information:", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
-app.get("/subscriptionList", verifyToken, async (req, res) => {
-  const { email } = req;
-
-  try {
-    const { subList } = await googleAuthClientInstance.getSubscriptionList();
-    const obj = {};
-    subList.forEach(({ id, name, img }) => {
-      obj[name] = {
-        id,
-        img,
-      };
-    });
-    const qry = "UPDATE user SET subList = ? WHERE email = ?";
-    db.myQuery(qry, [JSON.stringify(obj), email]);
-    res.json({ subList });
-  } catch (error) {
-    console.error("Error retrieving sub list:", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
 // =========== ROUTES ===========
+app.use("/user", userRouter);
 app.use("/folder", folderRouter);
 // app.use(notFound);
 // app.use(handleError);

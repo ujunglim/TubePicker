@@ -55,7 +55,7 @@ body {
   }
 }
 
-.header {
+header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -91,17 +91,20 @@ body {
   display: flex;
 }
 
-.sidebar {
+nav {
   background-color: white;
   width: 13rem;
   padding-top: 4rem;
+  position: fixed;
+  height: 100vh;
 }
 
-.main {
+main {
   background-color: $grey-light-color;
   flex: 1;
   display: flex;
   flex-flow: row;
   padding: 3rem;
-  margin-top: 3rem;
+  margin-top: 4rem;
+  padding-left: 16rem;
 }

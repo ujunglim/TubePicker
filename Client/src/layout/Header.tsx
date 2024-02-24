@@ -33,7 +33,7 @@ const Header = () => {
   }, [getUserInfo, isLoggedIn]);
 
   return (
-    <div className={styles.header}>
+    <header>
       <h1 className={styles.home_button} onClick={goToHome}>
         TubePicker
       </h1>
@@ -46,7 +46,7 @@ const Header = () => {
         </div>
       )}
       {localStorage.getItem("login") && <Logout />}
-    </div>
+    </header>
   );
 };
 

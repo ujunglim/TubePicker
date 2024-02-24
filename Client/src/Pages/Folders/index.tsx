@@ -41,7 +41,7 @@ const Folders = () => {
     setFolderList(data);
   };
   const getAllSubList = async () => {
-    const { data } = await api.get("/subscriptionList");
+    const { data } = await api.get("/user/subChannelList");
     setAllSubList(data.subList);
     setSubList(data.subList);
   };

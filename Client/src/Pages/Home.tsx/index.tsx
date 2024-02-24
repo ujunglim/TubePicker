@@ -8,14 +8,14 @@ const Home = () => {
   const [likedList, setLikedList] = useState<Video[] | []>([]);
 
   const getPlaylist = async () => {
-    const response = await api.post("/plalist");
+    const response = await api.get("/user/playList");
     setPlaylists(response.data);
   };
 
   const getLikedList = async () => {
     const {
       data: { likedList, nextPageToken },
-    } = await api.get("/likedlist", {
+    } = await api.get("/user/likeList", {
       prevPageToken: sessionStorage.getItem("likedListPageToken"),
     }); // todo prevPageToken
 

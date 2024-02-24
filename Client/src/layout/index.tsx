@@ -13,7 +13,7 @@ const AppLayout: FC<prop> = ({ children }) => {
       <Header />
       <div className={styles.content}>
         <SideBar />
-        <div className={styles.main}>{children}</div>
+        <main>{children}</main>
       </div>
     </div>
   );

@@ -77,9 +77,9 @@ const Modal: FC<Prop> = ({
             </button>
           </div>
           <div className={styles.children}>{children}</div>
-          <div className={styles.footer}>
+          <footer>
             <button onClick={handleOk}>OK</button>
-          </div>
+          </footer>
         </div>
       )}
     </div>
