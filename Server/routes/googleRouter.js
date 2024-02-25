@@ -1,7 +1,7 @@
 import express from "express";
 import { googleAuthClientInstance } from "../app.js";
 import db from "../db.js";
-import { getAccessToken, getRefreshToken } from "../util/jwt_util.js";
+import { makeAccessToken, makeRefreshToken } from "../util/jwt_util.js";
 
 const googleRouter = express.Router();
 
@@ -10,6 +10,7 @@ googleRouter.post("/get_login_url", (req, res) => {
   res.json({ auth2Url });
 });
 
+// 구글 로그인
 googleRouter.get("/send_auth_code", async (req, res) => {
   console.log("/google/send_auth_code", req.query.code);
   const accessToken = await googleAuthClientInstance.getGoogleAccessToken(
@@ -28,12 +29,16 @@ googleRouter.get("/send_auth_code", async (req, res) => {
 
   try {
     // 로그인 성공하면 브라우저에 accessToken, refreshToken 발급
-    const accessToken = getAccessToken(id, email, name);
-    const refreshToken = getRefreshToken(id, email, name);
+    const accessToken = makeAccessToken(email);
+    const refreshToken = makeRefreshToken(email);
 
     // 쿠키에 담아서 token전송
     res.cookie("accessToken", accessToken, { secure: true, httpOnly: true }); // httpOnly true이면 js에서 쿠키에 접근불가
     res.cookie("refreshToken", refreshToken, { secure: true, httpOnly: true });
+
+    // refreshToken, email DB에 저장
+    // db.myQuery("INSERT INTO activeUser ()");
+    console.log(req.ip, "ip is -----");
 
     // res.status(200).json({msg:"로그인 성공"});
   } catch (err) {
