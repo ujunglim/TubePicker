@@ -17,8 +17,8 @@ const getBaseUrl = () => {
 
 const api: any = axios.create(
   {
-    // baseURL: getBaseUrl()
-    baseURL: 'http://localhost:9090' // 로컬에서 dev할때
+    baseURL: getBaseUrl()
+    // baseURL: 'http://localhost:9090' // 로컬에서 dev할때
   }
 )
 // AxiosRequestConfig
