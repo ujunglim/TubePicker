@@ -2,8 +2,13 @@ import { verifyAccessToken } from "../util/jwt_util.js";
 
 // accessToken 인증
 export const verifyToken = (req, res, next) => {
+  console.log(
+    "===== START TO VERFIIY ACCESS TOKEN FROM CLIENT ==============="
+  );
   // try {
-  const accessToken = req.cookies.accessToken;
+  // const accessToken = req.cookies.accessToken;
+  const accessToken = req.headers.authorization;
+  console.log("클라 => 서버 엑세스", accessToken);
   const refreshToken = req.cookies.refreshToken;
   const { isVerified, status, msg, decoded, newAccessToken } =
     verifyAccessToken(accessToken, refreshToken);
