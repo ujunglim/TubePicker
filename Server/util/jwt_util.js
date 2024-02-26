@@ -13,7 +13,7 @@ export const makeAccessToken = (email) => {
 // refresh token 발급
 export const makeRefreshToken = (email) => {
   return jwt.sign({ email }, process.env.REFRESH_SECRET, {
-    expiresIn: "1d",
+    expiresIn: "10s",
     issuer: "ujung",
   });
 };

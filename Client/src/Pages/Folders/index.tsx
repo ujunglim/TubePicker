@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Modal from "../../Component/Modal";
-import { setModalPosition } from "../../store/slices/app";
+import { setIsLoggedIn, setModalPosition } from "../../store/slices/app";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import api from "../../api";
@@ -36,9 +36,22 @@ const Folders = () => {
     getAllSubList();
   }, []);
 
+  const logout = () => {
+    setIsLoggedIn(false);
+    alert("로그인이 필요합니다");
+    navigate("/");
+  };
+
   const getFolderList = async () => {
-    const { data } = await api.get("/folder");
-    setFolderList(data);
+    try {
+      const { data } = await api.get("/folder");
+      setFolderList(data);
+    } catch (err: any) {
+      const status = err.response.status;
+      if (status === 401) {
+        logout();
+      }
+    }
   };
   const getAllSubList = async () => {
     const { data } = await api.get("/user/subChannelList");

@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Video } from "../../types";
 import api from "../../api";
 import VideoList from "../../Component/VideoList";
+import { setIsLoggedIn } from "../../store/slices/app";
+import { useDispatch } from "react-redux";
 
 const Home = () => {
   const [playlists, setPlaylists] = useState<any[]>([]);
   const [likedList, setLikedList] = useState<Video[] | []>([]);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // 로그인
+    dispatch(setIsLoggedIn(true));
+  }, [dispatch]);
 
   const getPlaylist = async () => {
     const response = await api.get("/user/playList");

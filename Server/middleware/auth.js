@@ -7,7 +7,7 @@ export const verifyToken = (req, res, next) => {
   );
   // try {
   // const accessToken = req.cookies.accessToken;
-  const accessToken = req.headers.authorization;
+  const accessToken = req.headers.authorization.split("Bearer ")[1];
   console.log("클라 => 서버 엑세스", accessToken);
   const refreshToken = req.cookies.refreshToken;
   const { isVerified, status, msg, decoded, newAccessToken } =

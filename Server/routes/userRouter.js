@@ -19,13 +19,15 @@ userRouter.get("/refresh", (req, res) => {
     const { email } = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
     // 새로운 access token발급
     const newAccessToken = makeAccessToken(email);
-    console.log("새로운 token2 클라에게 발금", newAccessToken);
+    console.log("새로운 token2 클라에게 발급", newAccessToken);
     res.cookie("accessToken", newAccessToken, { secure: true });
     res.status(200).json({});
   } catch (err) {
     // 로그인
     console.log(err, "로그인 필요");
-    res.status(401).json({ msg: "Unauthorized 로그인 해주세요" });
+    res
+      .status(401)
+      .json({ msg: "refresh token이 만료됬습니다. 로그인해주세요" });
   }
 });
 userRouter.get("/likeList", verifyToken, getLikeList);
