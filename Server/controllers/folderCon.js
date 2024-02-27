@@ -1,4 +1,4 @@
-import { googleAuthClientInstance } from "../app.js";
+import GoogleAuthClient from "../util/google_util.js";
 import db from "../db.js";
 
 /**
@@ -83,10 +83,14 @@ export const getVideoOfFolder = async (req, res) => {
 
   for (const subId of subListArr) {
     try {
-      const data = await googleAuthClientInstance.getVideoOfAChannel(subId);
+      const gClient = new GoogleAuthClient();
+      const googleAccessToken = req.cookies.googleAccessToken;
+      gClient.initWithAccessToken(googleAccessToken);
+
+      const data = await gClient.getVideoOfAChannel(subId);
       allSubListArr.push(...data);
     } catch (err) {
-      console.log("[Error] Getting video of channel");
+      console.log("[Error] Getting video of channel", err);
     }
   }
   // 최신순으로 정렬

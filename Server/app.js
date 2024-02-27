@@ -1,7 +1,7 @@
 import express from "express";
 import path, { dirname } from "path";
 import cors from "cors";
-import GoogleAuthClient from "./google_utils.js";
+import GoogleAuthClient from "./util/google_util.js";
 import dotenv from "dotenv";
 import https from "https";
 import fs from "fs";
@@ -24,8 +24,6 @@ app.use(cookieParser());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 app.use(express.static(path.join(__dirname, "/../Client/build"))); // js, css등을 express에서 접근가능하게 한다.
-
-export const googleAuthClientInstance = new GoogleAuthClient();
 
 // =========== ROUTES ===========
 app.use("/google", googleRouter);
