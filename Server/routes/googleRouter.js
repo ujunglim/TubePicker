@@ -14,25 +14,11 @@ googleRouter.post("/get_login_url", (req, res) => {
 
 const generateToken = (email) => {
   const promise = new Promise((resolve, reject) => {
-    let accessToken = makeAccessToken(email);
-    let refreshToken = makeRefreshToken(email);
+    const accessToken = makeAccessToken(email);
+    const refreshToken = makeRefreshToken(email);
     resolve({ accessToken, refreshToken });
   });
-  console.log("finish generate token");
   return promise;
-
-  //   // refreshToken, email DB에 저장
-  //   // db.myQuery("INSERT INTO activeUser ()");
-  //   console.log(req.ip, "ip is -----");
-
-  //   // res.status(200).json({ userData });
-  //   // res.status(200).json({
-  //   //   accessToken,
-  //   //   refreshToken,
-  //   // });
-  // } catch (err) {
-  //   res.status(500).json({ msg: "로그인 실패" });
-  // }
 };
 
 // 구글 로그인 성공
@@ -70,17 +56,17 @@ googleRouter.get("/send_auth_code", async (req, res) => {
     httpOnly: true,
     path: "/user/refresh", // /user/refresh요청일때만 cookie에 refresh토큰을 담는다
   });
-  console.log("서버 => 클라 토큰1: ", accessToken);
 
-  // refreshToken, email DB에 저장
-  // db.myQuery("INSERT INTO activeUser ()");
-  // console.log(req.ip, "ip is -----");
-
-  // res.status(200).json({ userData });
-  // res.status(200).json({
-  //   accessToken,
-  //   refreshToken,
-  // });
+  // refreshToken, email, ip DB에 저장
+  db.query(
+    "INSERT INTO activeUser (email, refreshToken, ip) VALUES (?, ?, ?)",
+    [email, refreshToken, req.ip],
+    (err) => {
+      if (err) {
+        console.log(err);
+      }
+    }
+  );
 
   // ============== DB ==============
   try {

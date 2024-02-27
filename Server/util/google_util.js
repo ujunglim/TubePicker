@@ -33,14 +33,14 @@ class GoogleAuthClient {
 
   async getGoogleAccessToken(authCode) {
     const res = await this.client.getToken(authCode);
-    console.log("[Got Google AccessToken]");
+    console.log("[구글토큰 획득]");
     return res.tokens;
   }
 
   initWithAccessToken(tokens) {
     this.client.setCredentials(tokens);
     this.youtube = google.youtube({ version: "v3", auth: this.client });
-    console.log("[Init Google with token] Credentials set");
+    console.log("[구글토큰 init완료]");
     // console.log(this.client.credentials);
   }
 
@@ -53,7 +53,7 @@ class GoogleAuthClient {
 
       oauth2.userinfo.get(function (err, res) {
         if (err) {
-          console.log("[GETTING USER INFO]", err);
+          console.log("[유저정보 획득오류]", err);
           reject(err);
         } else {
           const { id, email, name, picture } = res.data;

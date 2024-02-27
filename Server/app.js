@@ -1,7 +1,7 @@
 import express from "express";
 import path, { dirname } from "path";
 import cors from "cors";
-import GoogleAuthClient from "./util/google_util.js";
+import GoogleAuthClient from "./util/google_util.js"; // db연결
 import dotenv from "dotenv";
 import https from "https";
 import fs from "fs";
