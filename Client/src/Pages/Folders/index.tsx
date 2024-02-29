@@ -77,23 +77,27 @@ const Folders = () => {
   };
 
   const firstContent = (
-    <input
-      type="text"
-      placeholder="폴더 이름을 입력하세요"
-      value={inputFolder}
-      onChange={(e) => setInputFolder(e.target.value)}
-    ></input>
+    <label htmlFor="folderName">
+      <input
+        type="text"
+        placeholder="폴더 이름을 입력하세요"
+        value={inputFolder}
+        onChange={(e) => setInputFolder(e.target.value)}
+      ></input>
+    </label>
   );
 
   const secondContent = (
     <div className={styles.secondContainer}>
-      <input
-        type="search"
-        value={inputChannel}
-        placeholder="채널 이름을 입력해주세요"
-        onChange={handleSearch}
-        style={{ marginBottom: "1.5rem", width: "80%" }}
-      />
+      <label htmlFor="channelName">
+        <input
+          type="search"
+          value={inputChannel}
+          placeholder="채널 이름을 입력해주세요"
+          onChange={handleSearch}
+          style={{ marginBottom: "1.5rem", width: "80%" }}
+        />
+      </label>
       <ScrollContainer>
         {subList.length ? (
           subList.map((sub: Sub) => {
@@ -105,12 +109,14 @@ const Folders = () => {
                 datatype={sub.name}
                 onClick={(e) => handleSelectionSub(e)}
               >
-                <input
-                  type="checkbox"
-                  datatype={sub.id}
-                  value={sub.name}
-                  checked={selectedSub[sub.name]}
-                />
+                <label htmlFor="selectedChannel">
+                  <input
+                    type="checkbox"
+                    datatype={sub.id}
+                    value={sub.name}
+                    checked={selectedSub[sub.name]}
+                  />
+                </label>
                 <div className={styles.user_profile}>
                   <img
                     src={sub.img}

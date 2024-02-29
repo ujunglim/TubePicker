@@ -3,7 +3,7 @@ import db from "../db.js";
 
 /**
  *
- * @description Create folder
+ * 폴더 생성
  * @route POST /folder
  */
 export const createFolder = async (req, res, next) => {
@@ -31,7 +31,7 @@ export const createFolder = async (req, res, next) => {
 };
 
 /**
- * @description Read folder list
+ * 폴더 리스트
  * @route GET /folder
  */
 export const getFolderList = async (req, res) => {
@@ -54,7 +54,10 @@ export const getFolderList = async (req, res) => {
     res.status(409).json({ message: err.message });
   }
 };
-
+/**
+ * 폴더 삭제
+ * @route DELETE /folder
+ */
 export const deleteFolder = async (req, res, next) => {
   const {
     email,
@@ -70,7 +73,7 @@ export const deleteFolder = async (req, res, next) => {
   res.status(200).send();
 };
 /**
- * @description get videos of a folder
+ * 폴더 안의 비디오들 불러오기
  * @route GET /folder/detail/:id
  */
 export const getVideoOfFolder = async (req, res) => {
@@ -81,16 +84,15 @@ export const getVideoOfFolder = async (req, res) => {
   const subListArr = Object.values(subList);
   const allSubListArr = [];
 
+  const gClient = new GoogleAuthClient();
+  const googleAccessToken = req.cookies.googleAccessToken;
+  gClient.initWithAccessToken(googleAccessToken);
   for (const subId of subListArr) {
     try {
-      const gClient = new GoogleAuthClient();
-      const googleAccessToken = req.cookies.googleAccessToken;
-      gClient.initWithAccessToken(googleAccessToken);
-
       const data = await gClient.getVideoOfAChannel(subId);
       allSubListArr.push(...data);
     } catch (err) {
-      console.log("[Error] Getting video of channel", err);
+      console.log("[Error] 한 채널의 비디오 불러오기", err);
     }
   }
   // 최신순으로 정렬

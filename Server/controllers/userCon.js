@@ -8,10 +8,12 @@ export const getLikeList = async (req, res) => {
     const googleAccessToken = req.cookies.googleAccessToken;
     gClient.initWithAccessToken(googleAccessToken);
 
-    const { likedList, nextPageToken } = await gClient.getUserLikedList();
+    const { likedList, nextPageToken } = await gClient.getUserLikedList(
+      req.body?.prevPageToken
+    );
     // getUserLikedList(req.body.prevPageToken);
 
-    res.status(200).json({ likedList, nextPageToken }); // 그 다음 페이지토큰 전달
+    res.status(200).json({ nextPageToken, likedList }); // 그 다음 페이지토큰 전달
   } catch (error) {
     console.error("Error retrieving video information:", error);
     res.status(500).json({ error: "Internal Server Error" });

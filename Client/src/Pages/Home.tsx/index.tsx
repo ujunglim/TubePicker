@@ -24,11 +24,12 @@ const Home = () => {
     try {
       const {
         data: { likedList, nextPageToken },
-      } = await api.get("/user/likeList", {
-        prevPageToken: sessionStorage.getItem("likedListPageToken"),
-      }); // todo prevPageToken
+      } = await api.post("/user/likeList", {
+        prevPageToken: sessionStorage.getItem("pageToken"),
+      });
+
       setLikedList((prev) => [...prev, ...likedList]);
-      sessionStorage.setItem("likedListPageToken", nextPageToken);
+      sessionStorage.setItem("pageToken", nextPageToken);
     } catch (err) {
       console.log(err);
     }

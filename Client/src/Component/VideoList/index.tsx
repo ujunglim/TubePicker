@@ -19,6 +19,10 @@ const VideoList: FC<Prop> = ({ list, fetchList }) => {
   const [selectedVideo, setSelectedVideo] = useState<null | Video>(null);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    sessionStorage.removeItem("pageToken"); // 기존리스트 토큰페이지 삭제한다.
+  }, []);
+
   const defaultOption = useMemo(
     () => ({
       root: null,
@@ -48,9 +52,9 @@ const VideoList: FC<Prop> = ({ list, fetchList }) => {
     }
     return () => {
       observer && observer.disconnect(); // 페이지 새로고침 시 관찰자가 존재하면 관찰을 멈춘다.
-      sessionStorage.removeItem("likedListPageToken"); // 기존의 리스트 토큰을 삭제한다.
+      sessionStorage.removeItem("pageToken"); // 기존리스트 토큰페이지 삭제한다.
     };
-  }, [checkIntersect, defaultOption]);
+  }, []);
 
   return (
     <div style={{ display: "flex", flexFlow: "column" }}>

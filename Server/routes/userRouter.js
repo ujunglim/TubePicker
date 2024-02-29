@@ -30,7 +30,7 @@ userRouter.get("/refresh", (req, res) => {
       .json({ msg: "refresh token이 만료됬습니다. 로그인해주세요" });
   }
 });
-userRouter.get("/likeList", verifyToken, getLikeList);
+userRouter.post("/likeList", verifyToken, getLikeList);
 userRouter.get("/subChannelList", verifyToken, getSubChannelList);
 userRouter.get("/playList", verifyToken, getPlayList);
 
