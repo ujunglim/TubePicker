@@ -136,20 +136,21 @@ class GoogleAuthClient {
     return { subList };
   }
 
-  async getVideoOfAChannel(channelId) {
+  async getVideoOfAChannel(channelId, pageToken) {
     const option = {
       part: "snippet",
       maxResults: 20,
       channelId,
       order: "date",
     };
+    if (pageToken) option.pageToken = pageToken; // 앞선 페이지 토큰이 있으면 추가하고 유튜브서버에 다음 페이지 데이터 요청
     const response = await this.youtube.search.list(option);
-    const result = [];
+    const list = [];
 
     response.data.items.map((item) => {
       const { title, description, channelTitle, publishedAt, thumbnails } =
         item.snippet;
-      result.push({
+      list.push({
         id: item.id.videoId,
         title,
         description,
@@ -158,7 +159,7 @@ class GoogleAuthClient {
         thumbnails,
       });
     });
-    return result;
+    return { list, channelId, pageToken: response.data.nextPageToken };
   }
 }
 

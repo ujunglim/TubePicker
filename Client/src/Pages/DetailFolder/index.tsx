@@ -7,16 +7,22 @@ const DetailFolder = () => {
   const { id } = useParams();
   const [list, setList] = useState<any[]>([]);
 
-  useEffect(() => {
-    getAllSubVideos();
-  }, []);
+  // useEffect(() => {
+  //   getVideosOfAFolder();
+  // }, []);
 
-  const getAllSubVideos = useCallback(async () => {
-    const { data } = await api.get(`/folder/detail/${id}`);
-    setList(data.list);
+  const getVideosOfAFolder = useCallback(async () => {
+    try {
+      const { data } = await api.get(`/folder/detail/${id}`);
+      setList(data.list);
+      sessionStorage.setItem("pageToken", data.pageToken);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }, [id]);
 
-  return <VideoList list={list} fetchList={getAllSubVideos} />;
+  return <VideoList list={list} fetchList={getVideosOfAFolder} />;
 };
 
 export default DetailFolder;

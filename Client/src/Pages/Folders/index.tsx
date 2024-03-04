@@ -36,21 +36,14 @@ const Folders = () => {
     getAllSubList();
   }, []);
 
-  const logout = () => {
-    setIsLoggedIn(false);
-    alert("로그인이 필요합니다");
-    navigate("/");
-  };
-
   const getFolderList = async () => {
     try {
       const { data } = await api.get("/folder");
+
       setFolderList(data);
     } catch (err: any) {
-      const status = err.response.status;
-      if (status === 401) {
-        logout();
-      }
+      console.log(err);
+      throw err;
     }
   };
   const getAllSubList = async () => {

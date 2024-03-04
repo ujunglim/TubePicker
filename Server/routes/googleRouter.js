@@ -57,17 +57,6 @@ googleRouter.get("/send_auth_code", async (req, res) => {
     path: "/user/refresh", // /user/refresh요청일때만 cookie에 refresh토큰을 담는다
   });
 
-  // refreshToken, email, ip DB에 저장
-  db.query(
-    "INSERT INTO activeUser (email, refreshToken, ip) VALUES (?, ?, ?)",
-    [email, refreshToken, req.ip],
-    (err) => {
-      if (err) {
-        console.log(err);
-      }
-    }
-  );
-
   // ============== DB ==============
   try {
     // 새로운 user인지 확인
@@ -79,10 +68,19 @@ googleRouter.get("/send_auth_code", async (req, res) => {
 
     // 새로운 user이면 db에 추가
     if (isNewUser) {
+      // user 테이블에 추가
       await db.myQuery(
         "INSERT INTO user (email, folderIdList, subList) VALUES (?, JSON_ARRAY(), JSON_OBJECT())",
         [email]
       );
+
+      // active user 테이블에 refreshToken, email, ip 추가
+      db.myQuery(
+        "INSERT INTO activeUser (email, refreshToken, ip) VALUES (?, ?, ?)",
+        [email, refreshToken, req.ip]
+      );
+    } else {
+      // TODO active user refreshtoken, email, ip 갱신
     }
   } catch (err) {
     console.log(`[ERROR] log in`);

@@ -83,14 +83,18 @@ export const getVideoOfFolder = async (req, res) => {
   )[0];
   const subListArr = Object.values(subList);
   const allSubListArr = [];
+  let currPageToken = "";
 
   const gClient = new GoogleAuthClient();
   const googleAccessToken = req.cookies.googleAccessToken;
   gClient.initWithAccessToken(googleAccessToken);
   for (const subId of subListArr) {
     try {
-      const data = await gClient.getVideoOfAChannel(subId);
-      allSubListArr.push(...data);
+      const { list, channelId, pageToken } = await gClient.getVideoOfAChannel(
+        subId
+      );
+      allSubListArr.push(...list);
+      currPageToken = pageToken;
     } catch (err) {
       console.log("[Error] 한 채널의 비디오 불러오기", err);
     }
@@ -101,5 +105,5 @@ export const getVideoOfFolder = async (req, res) => {
     const bTimeStamp = new Date(b.publishedAt).getTime();
     return bTimeStamp - aTimestamp;
   });
-  res.status(200).json({ list: allSubListArr });
+  res.status(200).json({ pageToken: currPageToken, list: allSubListArr });
 };
