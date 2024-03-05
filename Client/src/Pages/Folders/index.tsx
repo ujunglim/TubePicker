@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import Modal from "../../Component/Modal";
-import { setIsLoggedIn, setModalPosition } from "../../store/slices/app";
-import { useDispatch } from "react-redux";
+import { setModalPosition } from "../../store/slices/app";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import api from "../../api";
 import FolderRow from "../../Component/FolderRow";
 import styles from "./index.module.scss";
 import ScrollContainer from "../../Component/ScrollContainer";
 import { useNavigate } from "react-router";
+import { folderManage, setFolderList } from "../../store/slices/folder";
+import { fetchFolderList } from "../../api/folder";
 
 enum Step {
   FIRST = "first",
@@ -25,26 +27,16 @@ const Folders = () => {
   const [inputChannel, setInputChannel] = useState<string>("");
   const [allSubList, setAllSubList] = useState<Sub[]>([]);
   const [subList, setSubList] = useState<Sub[]>([]);
-  const [folderList, setFolderList] = useState([]);
   const [selectedSub, setSelectedSub] = useState<any>({});
   const [modalStep, setModalStep] = useState<Step>(Step.FIRST);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { folderList } = useSelector(folderManage);
 
   useEffect(() => {
-    getFolderList();
     getAllSubList();
   }, []);
 
-  const getFolderList = async () => {
-    try {
-      const { data } = await api.get("/folder");
-      setFolderList(data);
-    } catch (err: any) {
-      console.log(err);
-      throw err;
-    }
-  };
   const getAllSubList = async () => {
     const { data } = await api.get("/user/subChannelList");
     setAllSubList(data.subList);
@@ -167,7 +159,7 @@ const Folders = () => {
       name: inputFolder,
       list: selectedSub,
     });
-    setFolderList(data);
+    dispatch(setFolderList(data));
     toast.info("와우 폴더생성을 성공했습니다!");
     handleClose();
   };
@@ -175,7 +167,8 @@ const Folders = () => {
   const deleteFolder = async (e: any, id: string) => {
     e.stopPropagation(); // 이벤트버블링 방지
     await api.delete("/folder", { data: { id } });
-    getFolderList();
+    const newFolderList = fetchFolderList();
+    dispatch(setFolderList(newFolderList));
   };
 
   const detailFolder = async (id: string) => {

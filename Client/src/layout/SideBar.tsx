@@ -1,26 +1,22 @@
-import { useNavigate } from "react-router";
-import styles from "./index.module.scss";
 import SideTab from "../Component/SideTab";
 import { useSelector } from "react-redux";
 import { appManage } from "../store/slices/app";
+import { folderManage } from "../store/slices/folder";
+import { Folder } from "../types";
 
 const SideBar = () => {
-  const navigate = useNavigate();
   const { isLoggedIn } = useSelector(appManage);
+  const { folderList } = useSelector(folderManage);
 
-  const handleFolder = () => {
-    navigate("/folders");
-  };
   return (
     <aside>
       {isLoggedIn && (
         <>
-          <SideTab
-            title={"폴더 만들기"}
-            handleClick={handleFolder}
-            isFolder={false}
-          />
-          <SideTab title={"좋아요 영상"} handleClick={handleFolder} />
+          <SideTab id="folder" title={"폴더 만들기"} isFolder={false} />
+          <SideTab id="liked" title={"좋아요 영상"} />
+          {folderList.map((folder: Folder) => {
+            return <SideTab id={String(folder.id)} title={folder.name} />;
+          })}
         </>
       )}
     </aside>

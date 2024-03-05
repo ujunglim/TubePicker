@@ -12,3 +12,9 @@ export interface Video {
     };
   };
 }
+
+export interface Folder {
+  id: number;
+  name: string;
+  subList: any[]
+}

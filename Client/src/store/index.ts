@@ -1,9 +1,10 @@
 import {configureStore} from '@reduxjs/toolkit';
 import app from './slices/app';
+import folder from './slices/folder';
 
 const store = configureStore({
     reducer: {
-      app
+      app, folder
     },
 });
 

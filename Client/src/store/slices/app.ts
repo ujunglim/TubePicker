@@ -5,6 +5,7 @@ import { RootState } from '..';
 const initialState = {
   modalPosition: undefined,
   isLoggedIn: false,
+  selectedNav: 'liked'
 };
 
 // slice 생성
@@ -17,12 +18,15 @@ const appSlice = createSlice({
     },
     setIsLoggedIn(state, {payload}) {
       state.isLoggedIn = payload;
+    },
+    setSelectedNav(state, {payload}) {
+      state.selectedNav = payload;
     }
   }
 });
 
 // 액션 생성자 함수들을 추출
-export const { setModalPosition, setIsLoggedIn } = appSlice.actions;
+export const { setModalPosition, setIsLoggedIn, setSelectedNav } = appSlice.actions;
 export const appManage = (state: RootState) => state.app;
 
 // 리듀서를 추출
