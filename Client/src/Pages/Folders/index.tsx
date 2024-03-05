@@ -39,7 +39,6 @@ const Folders = () => {
   const getFolderList = async () => {
     try {
       const { data } = await api.get("/folder");
-
       setFolderList(data);
     } catch (err: any) {
       console.log(err);
@@ -88,7 +87,7 @@ const Folders = () => {
           value={inputChannel}
           placeholder="채널 이름을 입력해주세요"
           onChange={handleSearch}
-          style={{ marginBottom: "1.5rem", width: "80%" }}
+          style={{ marginBottom: "1.5rem" }}
         />
       </label>
       <ScrollContainer>

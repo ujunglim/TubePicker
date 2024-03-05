@@ -12,9 +12,18 @@ const SideBar = () => {
     navigate("/folders");
   };
   return (
-    <nav>
-      {isLoggedIn && <SideTab title={"Folders"} handleClick={handleFolder} />}
-    </nav>
+    <aside>
+      {isLoggedIn && (
+        <>
+          <SideTab
+            title={"폴더 만들기"}
+            handleClick={handleFolder}
+            isFolder={false}
+          />
+          <SideTab title={"좋아요 영상"} handleClick={handleFolder} />
+        </>
+      )}
+    </aside>
   );
 };
 

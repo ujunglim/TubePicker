@@ -12,4 +12,14 @@
   .detail {
     display: flex;
   }
+
+  .delete {
+    color: $grey-mid-color;
+    font-size: 20px;
+    transition: all 0.3s ease-in-out;
+    
+    &:hover {
+      color: $grey-color
+    }
+  }
 }

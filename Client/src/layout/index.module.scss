@@ -36,6 +36,7 @@ body {
     border: none;
     border-bottom: 1px solid $grey-mid-color;
     padding-bottom: .5rem;
+    cursor: pointer;
   }
 }
 
@@ -91,7 +92,7 @@ header {
   display: flex;
 }
 
-nav {
+aside {
   background-color: white;
   width: 13rem;
   padding-top: 4rem;

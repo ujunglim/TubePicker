@@ -1,6 +1,7 @@
 import styles from "./index.module.scss";
 import { FC } from "react";
 import { FaFolderOpen } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 interface Prop {
   id: number;
@@ -23,7 +24,9 @@ const FolderRow: FC<Prop> = ({
         <FaFolderOpen color="lightGrey" style={{ marginRight: "1rem" }} />
         {name}
       </div>
-      <span onClick={(e) => handleDelete(e, id)}>delete</span>
+      <span onClick={(e) => handleDelete(e, id)}>
+        <MdDelete className={styles.delete} />
+      </span>
     </div>
   );
 };
