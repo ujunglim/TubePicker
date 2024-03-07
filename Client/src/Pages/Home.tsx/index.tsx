@@ -66,6 +66,6 @@ const Home = () => {
 //       <button onClick={resetErrorBoundary}>재시도</button>
 //     </div>
 //   );
-};
+// };
 
 export default Home;

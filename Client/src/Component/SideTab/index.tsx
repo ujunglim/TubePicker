@@ -31,7 +31,7 @@ const SideTab: FC<Props> = ({ id, title, isFolder = true }) => {
       id={id}
       onClick={handleNav}
       style={{
-        background: selectedNav === id ? "rgb(243, 243, 243)" : "none",
+        background: String(selectedNav) === id ? "rgb(243, 243, 243)" : "none",
       }}
     >
       {isFolder && <FaFolderOpen className={styles.icon} />}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Modal from "../../Component/Modal";
-import { setModalPosition } from "../../store/slices/app";
+import { setModalPosition, setSelectedNav } from "../../store/slices/app";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import api from "../../api";
@@ -28,6 +28,7 @@ const Folders = () => {
   const [allSubList, setAllSubList] = useState<Sub[]>([]);
   const [subList, setSubList] = useState<Sub[]>([]);
   const [selectedSub, setSelectedSub] = useState<any>({});
+  const [deletingFolderId, setDeletingFolderId] = useState<string | null>(null);
   const [modalStep, setModalStep] = useState<Step>(Step.FIRST);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -132,15 +133,7 @@ const Folders = () => {
     setSelectedSub(newSelection);
   };
 
-  const handleClose = () => {
-    setInputFolder("");
-    setInputChannel("");
-    setModalStep(Step.FIRST);
-    setSelectedSub({});
-    dispatch(setModalPosition(undefined));
-  };
-
-  const setFolderName = async () => {
+  const inputFolderName = async () => {
     // valid
     if (inputFolder === "") {
       toast.error("폴더 이름을 입력해주세요");
@@ -161,18 +154,63 @@ const Folders = () => {
     });
     dispatch(setFolderList(data));
     toast.info("와우 폴더생성을 성공했습니다!");
-    handleClose();
+    handleModalClose();
   };
 
-  const deleteFolder = async (e: any, id: string) => {
+  const askDelete = (e: any, id: string) => {
     e.stopPropagation(); // 이벤트버블링 방지
-    await api.delete("/folder", { data: { id } });
-    const newFolderList = fetchFolderList();
+    setDeletingFolderId(id);
+    console.log("is deleting");
+    dispatch(setModalPosition(window.scrollY));
+  };
+
+  const deleteFolder = async () => {
+    await api.delete("/folder", { data: { id: deletingFolderId } });
+    const newFolderList = await fetchFolderList();
     dispatch(setFolderList(newFolderList));
+    handleModalClose();
   };
 
   const detailFolder = async (id: string) => {
+    handleModalClose();
     navigate(`/folders/detail/${id}`);
+    dispatch(setSelectedNav(id));
+  };
+
+  const renderModalTitle = () => {
+    if (deletingFolderId) return "폴더를 삭제하시겠습니까?";
+    if (modalStep === Step.FIRST) return "새 폴더를 생성하시겠습니까?";
+    if (modalStep === Step.SECOND) return "구독채널을 선택해주세요";
+    return "";
+  };
+
+  const renderModalChildren = () => {
+    if (deletingFolderId) return <></>;
+    if (modalStep === Step.FIRST) return firstContent;
+    if (modalStep === Step.SECOND) return secondContent;
+  };
+
+  const handleModalOk = () => {
+    if (deletingFolderId) {
+      deleteFolder();
+      return;
+    }
+    if (modalStep === Step.FIRST) inputFolderName();
+    if (modalStep === Step.SECOND) createFolder();
+  };
+
+  const handleModalClose = () => {
+    // 폴더삭제
+    if (deletingFolderId) {
+      setDeletingFolderId(null);
+    } else {
+      // 폴더추가
+      setInputFolder("");
+      setInputChannel("");
+      setModalStep(Step.FIRST);
+      setSelectedSub({});
+    }
+    dispatch(setModalPosition(undefined));
   };
 
   return (
@@ -188,18 +226,14 @@ const Folders = () => {
             name={name}
             subList={subList}
             handleDetail={detailFolder}
-            handleDelete={deleteFolder}
+            handleDelete={askDelete}
           />
         ))}
         <Modal
-          title={
-            modalStep === Step.FIRST
-              ? "새 폴더를 생성하시겠습니까?"
-              : "구독채널을 선택해주세요"
-          }
-          children={modalStep === Step.FIRST ? firstContent : secondContent}
-          handleOk={modalStep === Step.FIRST ? setFolderName : createFolder}
-          handleClose={handleClose}
+          title={renderModalTitle()}
+          children={renderModalChildren()}
+          handleOk={handleModalOk}
+          handleClose={handleModalClose}
         />
       </div>
     </div>

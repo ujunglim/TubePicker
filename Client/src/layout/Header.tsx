@@ -2,8 +2,8 @@ import { useNavigate } from "react-router";
 import styles from "./index.module.scss";
 import Logout from "../Component/Logout";
 import { useState, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
-import { appManage } from "../store/slices/app";
+import { useDispatch, useSelector } from "react-redux";
+import { appManage, setSelectedNav } from "../store/slices/app";
 import getCookies from "../utils/getCookies";
 
 interface UserInfo {
@@ -15,9 +15,11 @@ const Header = () => {
   const navigate = useNavigate();
   const { isLoggedIn } = useSelector(appManage);
   const [userInfo, setUserInfo] = useState<UserInfo>();
+  const dispatch = useDispatch();
 
   const goToHome = () => {
     navigate("/home");
+    dispatch(setSelectedNav("liked"));
   };
 
   const getUserInfo = useCallback(() => {

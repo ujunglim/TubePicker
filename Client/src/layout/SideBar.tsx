@@ -12,9 +12,9 @@ const SideBar = () => {
     <aside>
       {isLoggedIn && (
         <>
-          <SideTab id="folder" title={"폴더 만들기"} isFolder={false} />
+          <SideTab id="folder" title={"폴더 관리"} isFolder={false} />
           <SideTab id="liked" title={"좋아요 영상"} />
-          {folderList.map((folder: Folder) => {
+          {folderList?.map((folder: Folder) => {
             return <SideTab id={String(folder.id)} title={folder.name} />;
           })}
         </>

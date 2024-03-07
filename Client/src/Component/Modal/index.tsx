@@ -25,7 +25,7 @@ interface Prop {
 }
 const Modal: FC<Prop> = ({
   type = ModalType.FOLDER,
-  title,
+  title = "",
   children,
   handleClose,
   handleOk,
