@@ -15,7 +15,12 @@ export const getLikeList = async (req, res) => {
 
     res.status(200).json({ nextPageToken, likedList }); // 그 다음 페이지토큰 전달
   } catch (error) {
-    console.error("Error retrieving video information:", error);
+    const status = error.status;
+    if (status === 403) {
+      return res.status(404).json({
+        error: "가능한 유튜브 요청량을 초과했습니다. 잠시후 다시 시도해주세요",
+      });
+    }
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

@@ -4,7 +4,6 @@ import api from "../../api";
 import VideoList from "../../Component/VideoList";
 import { setIsLoggedIn } from "../../store/slices/app";
 import { useDispatch } from "react-redux";
-import { ErrorBoundary } from "react-error-boundary";
 import { setFolderList } from "../../store/slices/folder";
 import { fetchFolderList } from "../../api/folder";
 
@@ -16,7 +15,6 @@ const Home = () => {
   const getFolderList = useCallback(async () => {
     const folderList = await fetchFolderList();
     dispatch(setFolderList(folderList));
-    console.log(folderList);
   }, []);
 
   useEffect(() => {
@@ -45,27 +43,7 @@ const Home = () => {
     }
   };
 
-  return (
-    // <ErrorBoundary
-    //   fallback={<div>Something went wrong</div>}
-    //   FallbackComponent={ErrorFallback}
-    //   onReset={() => {
-    //   에러가 발생했을 때 재시도할 작업을 수행합니다.
-    //   }}
-    // >
-    <VideoList list={likedList} fetchList={getLikedList} />
-    // </ErrorBoundary>
-  );
+  return <VideoList list={likedList} fetchList={getLikedList} />;
 };
-
-// const ErrorFallback: FC<any> = ({ error, resetErrorBoundary }) => {
-//   return (
-//     <div>
-//       <h2>죄송합니다, 뭔가 잘못되었습니다.</h2>
-//       <p>{error.message}</p>
-//       <button onClick={resetErrorBoundary}>재시도</button>
-//     </div>
-//   );
-// };
 
 export default Home;

@@ -69,6 +69,10 @@ api.interceptors.response.use(
           }
         }
       }
+      // 유튜브 요청량 초과
+      if(response?.status === 404) {
+        window.location.replace('/notFound');
+      }
     return Promise.reject(error);
   }
 );
