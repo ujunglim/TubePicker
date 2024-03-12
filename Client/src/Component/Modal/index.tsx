@@ -12,7 +12,7 @@ export enum ModalType {
 }
 interface Prop {
   type?: ModalType;
-  title: string;
+  title?: string;
   children?: ReactNode;
   handleClose?: () => void;
   handleOk?: () => void;

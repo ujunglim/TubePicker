@@ -1,14 +1,22 @@
 import styles from "./index.module.scss";
 import { FC } from "react";
-import { FaFolderOpen } from "react-icons/fa";
+import { FaFolderOpen, FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { ModalType, Sub } from "../../Pages/Folders";
 
 interface Prop {
   id: number;
   name: string;
   subList: string;
-  handleDetail: any;
-  handleDelete: any;
+  handleDetail: (id: number) => void;
+  handleEdit: (
+    e: any,
+    id: number,
+    type: ModalType,
+    name: string,
+    subList: any
+  ) => void;
+  handleDelete: (e: any, id: number, type: ModalType) => void;
 }
 
 const FolderRow: FC<Prop> = ({
@@ -17,6 +25,7 @@ const FolderRow: FC<Prop> = ({
   subList,
   handleDetail,
   handleDelete,
+  handleEdit,
 }) => {
   return (
     <div className={styles.box} onClick={() => handleDetail(id)}>
@@ -24,9 +33,14 @@ const FolderRow: FC<Prop> = ({
         <FaFolderOpen color="lightGrey" style={{ marginRight: "1rem" }} />
         {name}
       </div>
-      <span onClick={(e) => handleDelete(e, id)}>
-        <MdDelete className={styles.delete} />
-      </span>
+      <div>
+        <span onClick={(e) => handleEdit(e, id, ModalType.EDIT, name, subList)}>
+          <FaEdit className={styles.delete} />
+        </span>
+        <span onClick={(e) => handleDelete(e, id, ModalType.DELETE)}>
+          <MdDelete className={styles.delete} />
+        </span>
+      </div>
     </div>
   );
 };

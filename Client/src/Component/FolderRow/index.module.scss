@@ -4,10 +4,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid rgb(224, 224, 224);
   cursor: pointer;
   padding: .8rem;
   width: 80%;
+  background-color: $white-color;
+  transition: all .3s ease-in-out;
+
+  &:hover {
+    color: $accent-color
+  }
 
   .detail {
     display: flex;
