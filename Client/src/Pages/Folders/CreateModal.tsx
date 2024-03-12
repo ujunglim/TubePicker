@@ -9,7 +9,7 @@ import api from "../../api";
 import { useDispatch } from "react-redux";
 import { Sub } from ".";
 
-enum Step {
+export enum Step {
   FIRST = "first",
   SECOND = "second",
 }
@@ -20,28 +20,28 @@ interface Prop {
 }
 
 const CreateModal: FC<Prop> = ({ allSubList, onClose }) => {
-  const [inputFolder, setInputFolder] = useState<string>("");
-  const [inputChannel, setInputChannel] = useState<string>("");
-  const [subList, setSubList] = useState<Sub[]>([]);
-  const [selectedSub, setSelectedSub] = useState<any>({});
+  const [folderName, setFolderName] = useState<string>("");
+  const [searchingName, setSearchingName] = useState<string>("");
+  const [channelList, setChannelList] = useState<Sub[]>([]);
+  const [selectedChannels, setSelectedChannels] = useState<any>({});
   const [modalStep, setModalStep] = useState<Step>(Step.FIRST);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setSubList(allSubList);
+    setChannelList(allSubList);
   }, [allSubList]);
 
   const handleSearch = (e: any) => {
     const keyword = e.target.value.toLowerCase();
-    setInputChannel(keyword);
+    setSearchingName(keyword);
 
     if (keyword !== "") {
       const filteredSubList = allSubList.filter(({ name }) =>
         name.toLowerCase().startsWith(keyword)
       );
-      setSubList(filteredSubList);
+      setChannelList(filteredSubList);
     } else {
-      setSubList(allSubList);
+      setChannelList(allSubList);
     }
   };
 
@@ -49,13 +49,13 @@ const CreateModal: FC<Prop> = ({ allSubList, onClose }) => {
     const target = e.currentTarget;
     const name = target.getAttribute("datatype");
     const id = target.id;
-    const newSelection = { ...selectedSub };
-    if (selectedSub[name]) {
+    const newSelection = { ...selectedChannels };
+    if (selectedChannels[name]) {
       delete newSelection[name];
     } else {
       newSelection[name] = id;
     }
-    setSelectedSub(newSelection);
+    setSelectedChannels(newSelection);
   };
 
   const firstContent = (
@@ -63,8 +63,8 @@ const CreateModal: FC<Prop> = ({ allSubList, onClose }) => {
       <input
         type="text"
         placeholder="폴더 이름을 입력하세요"
-        value={inputFolder}
-        onChange={(e) => setInputFolder(e.target.value)}
+        value={folderName}
+        onChange={(e) => setFolderName(e.target.value)}
       ></input>
     </label>
   );
@@ -74,15 +74,15 @@ const CreateModal: FC<Prop> = ({ allSubList, onClose }) => {
       <label htmlFor="channelName">
         <input
           type="search"
-          value={inputChannel}
+          value={searchingName}
           placeholder="채널 이름을 입력해주세요"
           onChange={handleSearch}
           style={{ marginBottom: "1.5rem" }}
         />
       </label>
       <ScrollContainer>
-        {subList.length ? (
-          subList.map((sub: Sub) => {
+        {channelList.length ? (
+          channelList.map((sub: Sub) => {
             return (
               <div
                 key={sub.id}
@@ -96,7 +96,7 @@ const CreateModal: FC<Prop> = ({ allSubList, onClose }) => {
                     type="checkbox"
                     datatype={sub.id}
                     value={sub.name}
-                    checked={selectedSub[sub.name]}
+                    checked={selectedChannels[sub.name]}
                   />
                 </label>
                 <div className={styles.user_profile}>
@@ -119,27 +119,27 @@ const CreateModal: FC<Prop> = ({ allSubList, onClose }) => {
 
   const renderModalTitle = () => {
     if (modalStep === Step.FIRST) return "새 폴더를 생성하시겠습니까?";
-    if (modalStep === Step.SECOND) return "구독채널을 선택해주세요";
+    if (modalStep === Step.SECOND) return "채널을 선택해주세요";
   };
 
   const handleModalClose = () => {
     onClose();
-    setInputFolder("");
-    setInputChannel("");
+    setFolderName("");
+    setSearchingName("");
     setModalStep(Step.FIRST);
-    setSelectedSub({});
+    setSelectedChannels({});
     dispatch(setModalPosition(undefined));
   };
 
   const createFolder = async () => {
     // try {} catch
-    if (!Object.keys(selectedSub).length) {
+    if (!Object.keys(selectedChannels).length) {
       toast.error("채널을 1개 이상 선택해주세요");
       return;
     }
     const { data } = await api.post("/folder", {
-      name: inputFolder,
-      list: selectedSub,
+      name: folderName,
+      list: selectedChannels,
     });
     dispatch(setFolderList(data));
     toast.info("와우 폴더생성을 성공했습니다!");
@@ -153,7 +153,7 @@ const CreateModal: FC<Prop> = ({ allSubList, onClose }) => {
 
   const inputFolderName = async () => {
     // valid
-    if (inputFolder === "") {
+    if (folderName === "") {
       toast.error("폴더 이름을 입력해주세요");
       return;
     }

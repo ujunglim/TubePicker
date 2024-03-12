@@ -43,7 +43,7 @@ const VideoList: FC<Prop> = ({ list, fetchList }) => {
   );
 
   useEffect(() => {
-    dispatch(setIsLoggedIn(true));
+    // dispatch(setIsLoggedIn(true));
     let observer: IntersectionObserver;
     // 관찰타겟이 존재하는지 체크
     if (loaderRef.current) {

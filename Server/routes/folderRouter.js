@@ -4,12 +4,16 @@ import {
   getFolderList,
   deleteFolder,
   getVideoOfFolder,
+  editFolder,
 } from "../controllers/folderCon.js";
 import { verifyToken } from "../middleware/auth.js";
 
 const folderRouter = express.Router();
 // CREATE
 folderRouter.post("/", verifyToken, createFolder);
+
+// EDIT
+folderRouter.put("/", verifyToken, editFolder);
 
 // READ
 folderRouter.get("/", verifyToken, getFolderList);

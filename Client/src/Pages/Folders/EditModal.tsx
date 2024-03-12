@@ -8,43 +8,46 @@ import { setFolderList } from "../../store/slices/folder";
 import api from "../../api";
 import { Sub } from ".";
 import { useDispatch } from "react-redux";
-
-enum Step {
-  FIRST = "first",
-  SECOND = "second",
-}
+import { Step } from "./CreateModal";
 
 interface Prop {
-  info: any;
+  info: {
+    id: number;
+    name: string;
+    subList: {
+      [key: string]: string;
+    };
+  };
   allSubList: Sub[];
   onClose: () => void;
 }
 
 const EditModal: FC<Prop> = ({ info, allSubList, onClose }) => {
-  const [inputFolder, setInputFolder] = useState<string>(""); // 폴더이름
-  const [inputChannel, setInputChannel] = useState<string>(""); // 검색하는 채널이름
-  const [subList, setSubList] = useState<Sub[]>([]); // 전체 채널
-  const [selectedSub, setSelectedSub] = useState<any>({}); // 선택한 채널
+  const [folderName, setFolderName] = useState<string>(""); // 폴더이름
+  const [searchingName, setSearchingName] = useState<string>(""); // 검색하는 채널이름
+  const [channelList, setChannelList] = useState<Sub[]>([]); // 전체 채널
+  const [selectedChannels, setSelectedChannels] = useState<any>({}); // 선택한 채널
   const [modalStep, setModalStep] = useState<Step>(Step.FIRST);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setInputFolder(info.name); // 기존 폴더이름
-    setSelectedSub(info.subList); // 기존 선택한 채널
-    setSubList(allSubList); // 구독하는 전체채널
+    setFolderName(info.name); // 기존 폴더이름
+    setSelectedChannels(info.subList); // 기존 선택한 채널
+    setChannelList(allSubList); // 구독하는 전체채널
+    console.log(allSubList, "++");
   }, [allSubList, info, info.name, info.subList]);
 
   const handleSearch = (e: any) => {
     const keyword = e.target.value.toLowerCase();
-    setInputChannel(keyword);
+    setSearchingName(keyword);
 
     if (keyword !== "") {
       const filteredSubList = allSubList.filter(({ name }) =>
         name.toLowerCase().startsWith(keyword)
       );
-      setSubList(filteredSubList);
+      setChannelList(filteredSubList);
     } else {
-      setSubList(allSubList);
+      setChannelList(allSubList);
     }
   };
 
@@ -52,13 +55,13 @@ const EditModal: FC<Prop> = ({ info, allSubList, onClose }) => {
     const target = e.currentTarget;
     const name = target.getAttribute("datatype");
     const id = target.id;
-    const newSelection = { ...selectedSub };
-    if (selectedSub[name]) {
+    const newSelection = { ...selectedChannels };
+    if (selectedChannels[name]) {
       delete newSelection[name];
     } else {
       newSelection[name] = id;
     }
-    setSelectedSub(newSelection);
+    setSelectedChannels(newSelection);
   };
 
   const firstContent = (
@@ -66,8 +69,8 @@ const EditModal: FC<Prop> = ({ info, allSubList, onClose }) => {
       <input
         type="text"
         placeholder="폴더 이름을 입력하세요"
-        value={inputFolder}
-        onChange={(e) => setInputFolder(e.target.value)}
+        value={folderName}
+        onChange={(e) => setFolderName(e.target.value)}
       ></input>
     </label>
   );
@@ -77,15 +80,15 @@ const EditModal: FC<Prop> = ({ info, allSubList, onClose }) => {
       <label htmlFor="channelName">
         <input
           type="search"
-          value={inputChannel}
+          value={searchingName}
           placeholder="채널 이름을 입력해주세요"
           onChange={handleSearch}
           style={{ marginBottom: "1.5rem" }}
         />
       </label>
       <ScrollContainer>
-        {subList.length ? (
-          subList.map((sub: Sub) => {
+        {channelList.length ? (
+          channelList.map((sub: Sub) => {
             return (
               <div
                 key={sub.id}
@@ -99,7 +102,7 @@ const EditModal: FC<Prop> = ({ info, allSubList, onClose }) => {
                     type="checkbox"
                     datatype={sub.id}
                     value={sub.name}
-                    checked={selectedSub[sub.name]}
+                    checked={selectedChannels[sub.name]}
                   />
                 </label>
                 <div className={styles.user_profile}>
@@ -122,28 +125,28 @@ const EditModal: FC<Prop> = ({ info, allSubList, onClose }) => {
 
   const renderModalTitle = () => {
     if (modalStep === Step.FIRST) return "폴더이름을 수정해주세요";
-    if (modalStep === Step.SECOND) return "구독채널을 수정해주세요";
+    if (modalStep === Step.SECOND) return "채널을 선택해주세요";
   };
 
   const handleModalClose = () => {
     onClose();
-    setInputFolder("");
-    setInputChannel("");
+    setFolderName("");
+    setSearchingName("");
     setModalStep(Step.FIRST);
-    setSelectedSub({});
+    setSelectedChannels({});
     dispatch(setModalPosition(undefined));
   };
 
   const editFolder = async () => {
     // try {} catch
-    if (!Object.keys(selectedSub).length) {
+    if (!Object.keys(selectedChannels).length) {
       toast.error("채널을 1개 이상 선택해주세요");
       return;
     }
-    // TODO
-    const { data } = await api.post("/folder", {
-      name: inputFolder,
-      list: selectedSub,
+    const { data } = await api.put("/folder", {
+      id: info.id,
+      name: folderName,
+      list: selectedChannels,
     });
     dispatch(setFolderList(data));
     toast.info("와우 폴더수정을 성공했습니다!");
@@ -157,7 +160,7 @@ const EditModal: FC<Prop> = ({ info, allSubList, onClose }) => {
 
   const inputFolderName = async () => {
     // valid
-    if (inputFolder === "") {
+    if (folderName === "") {
       toast.error("폴더 이름을 입력해주세요");
       return;
     }

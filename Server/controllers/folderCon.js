@@ -4,7 +4,7 @@ import db from "../db.js";
 /**
  *
  * 폴더 생성
- * @route POST /folder
+ * @route [POST] /folder
  */
 export const createFolder = async (req, res, next) => {
   const { email } = req;
@@ -22,6 +22,23 @@ export const createFolder = async (req, res, next) => {
     const qry = `UPDATE user SET folderIdList = JSON_MERGE(folderIdList, JSON_ARRAY(?)) WHERE email = ?`;
     await db.myQuery(qry, [newFolderId, email]);
     console.log("folder has been created");
+
+    // get new folder list
+    getFolderList(req, res);
+  } catch (err) {
+    res.status(409).json({ message: err });
+  }
+};
+
+/**
+ * 폴더 이름,채널 수정
+ */
+export const editFolder = async (req, res) => {
+  try {
+    const { id, name, list } = req.body;
+    const jsonList = JSON.stringify(list);
+    const qry = "UPDATE folder SET name = ?, subList = ? WHERE id = ?";
+    await db.myQuery(qry, [name, jsonList, id]);
 
     // get new folder list
     getFolderList(req, res);
@@ -54,6 +71,7 @@ export const getFolderList = async (req, res) => {
     res.status(409).json({ message: err.message });
   }
 };
+
 /**
  * 폴더 삭제
  * @route DELETE /folder
@@ -72,6 +90,7 @@ export const deleteFolder = async (req, res, next) => {
   await db.myQuery(qry, [String(id), email]);
   res.status(200).send();
 };
+
 /**
  * 폴더 안의 비디오들 불러오기
  * @route GET /folder/detail/:id
