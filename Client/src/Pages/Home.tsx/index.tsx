@@ -2,7 +2,6 @@ import { useState, useEffect, FC, useCallback } from "react";
 import { Video } from "../../types";
 import api from "../../api";
 import VideoList from "../../Component/VideoList";
-import { setIsLoggedIn } from "../../store/slices/app";
 import { useDispatch } from "react-redux";
 import { setFolderList } from "../../store/slices/folder";
 import { fetchFolderList } from "../../api/folder";
@@ -18,7 +17,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(setIsLoggedIn(true));
+    localStorage.setItem("login", "true");
     getFolderList();
   }, [dispatch, getFolderList]);
 

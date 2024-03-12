@@ -46,7 +46,7 @@ api.interceptors.response.use(
     if (response?.status === 419 && originalRequest) {
         console.log('클라 액세스 토큰 만료됨')
         try {
-          await axios.get('/user/refresh');
+          await axios.get('/user/refresh'); // refresh token으로 업데이트
           // Retry all requests in the queue with the new token
           // refreshAndRetryQueue.forEach(({ config, resolve, reject }) => {
           //   api
@@ -58,11 +58,12 @@ api.interceptors.response.use(
           // // Clear the queue
           // refreshAndRetryQueue.length = 0;
   
-          // 원래 request 재요청
+          // 이전의 request 재요청
           return api(originalRequest);
         } catch (error: any) {
           if (error.response.status === 401) {
-           // refresh토큰 만료
+           // refresh토큰도 만료
+           localStorage.setItem('login', "false");
             alert('로그인이 필요합니다');
             window.location.replace('/');
             // return Promise.reject();

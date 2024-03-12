@@ -2,8 +2,7 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./index.module.scss";
 import VideoContent from "../VideoContent";
 import { Video } from "../../types";
-import ModalVideo from "../ModalVideo";
-import { appManage, setIsLoggedIn } from "../../store/slices/app";
+import { appManage } from "../../store/slices/app";
 import { useSelector, useDispatch } from "react-redux";
 import Modal, { ModalType } from "../Modal";
 
