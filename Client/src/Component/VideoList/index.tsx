@@ -3,7 +3,7 @@ import styles from "./index.module.scss";
 import VideoContent from "../VideoContent";
 import { Video } from "../../types";
 import { appManage } from "../../store/slices/app";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import Modal, { ModalType } from "../Modal";
 
 interface Prop {
@@ -16,7 +16,6 @@ const VideoList: FC<Prop> = ({ list, fetchList }) => {
   const loaderRef = useRef<HTMLDivElement | null>(null);
   const { modalPosition } = useSelector(appManage);
   const [selectedVideo, setSelectedVideo] = useState<null | Video>(null);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     sessionStorage.removeItem("pageToken"); // 기존리스트 토큰페이지 삭제한다.
@@ -35,14 +34,12 @@ const VideoList: FC<Prop> = ({ list, fetchList }) => {
     ([entry]: any, observer: any) => {
       if (entry.isIntersecting) {
         fetchList();
-        // getLikedList();
       }
     },
     [fetchList]
   );
 
   useEffect(() => {
-    // dispatch(setIsLoggedIn(true));
     let observer: IntersectionObserver;
     // 관찰타겟이 존재하는지 체크
     if (loaderRef.current) {
@@ -56,7 +53,13 @@ const VideoList: FC<Prop> = ({ list, fetchList }) => {
   }, []);
 
   return (
-    <div style={{ display: "flex", flexFlow: "column" }}>
+    <div
+      style={{
+        display: "flex",
+        flexFlow: "column",
+        width: "100%",
+      }}
+    >
       <section className={styles.video_list} ref={videoListRef}>
         {list &&
           list.map((video: Video) => {
@@ -69,9 +72,7 @@ const VideoList: FC<Prop> = ({ list, fetchList }) => {
             );
           })}
       </section>
-      <div ref={loaderRef} style={{ marginTop: "20px", textAlign: "center" }}>
-        Loading...
-      </div>
+      <div ref={loaderRef} className={styles.loader}></div>
       {selectedVideo && modalPosition !== undefined && (
         <Modal
           type={ModalType.VIDEO}

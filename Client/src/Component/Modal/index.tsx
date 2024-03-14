@@ -78,7 +78,10 @@ const Modal: FC<Prop> = ({
           </div>
           <div className={styles.children}>{children}</div>
           <footer>
-            <button onClick={handleOk}>OK</button>
+            <button onClick={handleClose} className={styles.cancelBtn}>
+              취소
+            </button>
+            <button onClick={handleOk}>확인</button>
           </footer>
         </div>
       )}

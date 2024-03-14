@@ -8,6 +8,12 @@
 
   .video_img {
     position: relative;
+
+    .emptyVideo {
+      width: 100%;
+      height: 100%;
+      background-color: $grey-color;
+    }
   }
 
   .title {

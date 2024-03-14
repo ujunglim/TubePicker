@@ -30,15 +30,15 @@ const FolderRow: FC<Prop> = ({
   return (
     <div className={styles.box} onClick={() => handleDetail(id)}>
       <div className={styles.detail}>
-        <FaFolderOpen color="lightGrey" style={{ marginRight: "1rem" }} />
+        <FaFolderOpen color="lightGrey" className={styles.folderIcon} />
         {name}
       </div>
       <div>
         <span onClick={(e) => handleEdit(e, id, ModalType.EDIT, name, subList)}>
-          <FaEdit className={styles.delete} />
+          <FaEdit className={styles.icon} style={{ marginRight: "1rem" }} />
         </span>
         <span onClick={(e) => handleDelete(e, id, ModalType.DELETE)}>
-          <MdDelete className={styles.delete} />
+          <MdDelete className={styles.icon} />
         </span>
       </div>
     </div>

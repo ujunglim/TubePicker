@@ -1,0 +1,120 @@
+@import '../../variables.scss';
+
+.container {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  padding: 6rem 4rem 6rem 4rem;
+  
+  .heroDiv {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    background-color: $grey-light-color;
+    height: fit-content;
+    border-radius: 5px;
+    padding: 2rem;
+    
+    .title {
+      font-weight: 900;
+      font-size: 2.5rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-top: 20px;
+    }
+
+    button {
+      display: flex;
+      align-items: center;
+      position: relative;
+      width: fit-content;
+      height: 50px;
+      padding: 13px 20px;
+      background-color: transparent;
+  
+      &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        border-radius: 25px;
+        background: rgba( rgba( $primary-color, 1), .5);
+        width: 50px;
+        height: 50px;
+        transition: $transition;
+      }
+  
+      .visible {
+        position: relative;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+
+        .loginIcon {
+          margin-right: 1rem;
+          position: relative;
+          top: 2px;
+          right: 2px;
+          
+          // 애니메이션
+          border-radius: 50%;
+          box-shadow: 0 0 0 0 rgba(255, 102, 102, 0.548);
+          animation: a1 1s infinite;
+
+          @keyframes a1 {
+            100% {box-shadow: 0 0 0 30px #ff000000}
+          }
+        }
+
+        .invisible {
+          display: none
+        }
+      }
+  
+      &:hover {
+        .invisible {
+          display: inline;
+        } 
+        .loginIcon {
+          animation: none;
+        }
+
+        &:before {
+          width: 100%;
+          background: rgba( $primary-color, 1);
+        }
+      }
+  
+      &:active {
+        transform: scale(.96);
+      }
+    }
+  }
+
+  .line {
+    border: 1px solid $grey-mid-color;;
+    margin: 8rem 0 4rem;
+  }
+
+  section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3rem;
+    font-size: 1.2rem;
+
+    :nth-child(1) {
+      margin-right: 30%;
+    }
+
+    img {
+      max-width: 400px;
+      height: 300px;
+    }
+  }
+
+}

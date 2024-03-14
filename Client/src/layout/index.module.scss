@@ -1,16 +1,16 @@
 @import '../variables.scss';
-@font-face {
-  font-family: 'Kakao';
-  src: url('../../public/fonts/KakaoRegular.ttf') format('truetype');
+// @font-face {
+//   font-family: 'Kakao';
+//   src: url('../../public/fonts/KakaoRegular.ttf') format('truetype');
 
-  // 폰트 기본 스타일
-  font-weight: 400;
-  font-style: normal;
-}
+//   // 폰트 기본 스타일
+//   font-weight: 400;
+//   font-style: normal;
+// }
 
 body {
   margin: 0;
-  font-family: 'Kakao';
+  font-family: "Poppins", sans-serif;;
   
   img {
     width: 100%;
@@ -23,11 +23,11 @@ body {
     color: $white-color;
     cursor: pointer;
     border-radius: 3px;
+    transition: $transition;
 
     &:hover {
       background-color: $accent-color;
-      transition: all 0.3ms ease-in-out;
-
+      transition: $transition;
     }
   }
 
@@ -37,7 +37,7 @@ body {
     border-bottom: 1px solid $grey-mid-color;
     padding-bottom: .5rem;
     cursor: pointer;
-    font-family: 'Kakao';
+    font-family: "Poppins", sans-serif;;
     background-color: none;
   }
 }

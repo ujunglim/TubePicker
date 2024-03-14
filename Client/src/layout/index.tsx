@@ -1,3 +1,4 @@
+import Landing from "../Pages/Landing";
 import Header from "./Header";
 import SideBar from "./SideBar";
 import styles from "./index.module.scss";
@@ -10,11 +11,17 @@ interface prop {
 const AppLayout: FC<prop> = ({ children }) => {
   return (
     <div className={styles.layout}>
-      <Header />
-      <div className={styles.content}>
-        <SideBar />
-        <main>{children}</main>
-      </div>
+      {localStorage.getItem("login") === "true" ? (
+        <>
+          <Header />
+          <div className={styles.content}>
+            <SideBar />
+            <main>{children}</main>
+          </div>
+        </>
+      ) : (
+        <Landing />
+      )}
     </div>
   );
 };

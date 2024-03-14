@@ -15,6 +15,7 @@ const VideoContent: FC<Props> = ({ video, setSelectedVideo }) => {
   const dispatch = useDispatch();
 
   const openModal = useCallback(() => {
+    if (!thumbnails?.medium?.url) return;
     const scrollPos = window.scrollY;
     dispatch(setModalPosition(scrollPos));
     document.body.style.position = "fixed"; // 스크롤바를 없애준다
@@ -26,7 +27,10 @@ const VideoContent: FC<Props> = ({ video, setSelectedVideo }) => {
   return (
     <div key={id} className={styles.video_content_box} onClick={openModal}>
       <div className={styles.video_img}>
-        <img src={thumbnails?.medium?.url} alt="thumbnail" />
+        <img
+          src={thumbnails?.medium?.url || "/img/empty_video.png"}
+          alt="thumbnail"
+        />
       </div>
       <p className={styles.title}>{title}</p>
       <p className={styles.subtitle}>{channelTitle}</p>

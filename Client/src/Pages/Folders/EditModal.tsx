@@ -9,6 +9,7 @@ import api from "../../api";
 import { Sub } from ".";
 import { useDispatch } from "react-redux";
 import { Step } from "./CreateModal";
+import { VscSearch } from "react-icons/vsc";
 
 interface Prop {
   info: {
@@ -71,19 +72,20 @@ const EditModal: FC<Prop> = ({ info, allSubList, onClose }) => {
         placeholder="폴더 이름을 입력하세요"
         value={folderName}
         onChange={(e) => setFolderName(e.target.value)}
-      ></input>
+      />
     </label>
   );
 
   const secondContent = (
     <div className={styles.secondContainer}>
       <label htmlFor="channelName">
+        <VscSearch className={styles.searchIcon} />
         <input
           type="search"
           value={searchingName}
-          placeholder="채널 이름을 입력해주세요"
+          placeholder="채널 이름을 검색하세요"
           onChange={handleSearch}
-          style={{ marginBottom: "1.5rem" }}
+          className={styles.search}
         />
       </label>
       <ScrollContainer>
@@ -117,7 +119,10 @@ const EditModal: FC<Prop> = ({ info, allSubList, onClose }) => {
             );
           })
         ) : (
-          <div className={styles.noMatch}>매치되는 채널이 없습니다</div>
+          <div className={styles.noMatch}>
+            <img src="/img/no_result.png" alt="no_result" />
+            채널이 존재하지 않습니다
+          </div>
         )}
       </ScrollContainer>
     </div>

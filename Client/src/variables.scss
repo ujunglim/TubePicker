@@ -1,11 +1,15 @@
 
-$primary-color: #ff8a7a;
+// $primary-color:  #FFAB9D;
+$primary-color: #ff9a8d;
 $accent-color: #ff8575;
 $secondary-color: #20C997;
 
 $white-color:#fff;
 $grey-light-color: rgb(243, 243, 243);
 $grey-mid-color: #dadada;
+$grey-mid-hover-color:#c2c2c2;
 $grey-color: #a0a0a0;
 $black-color: #111;
 $mask-color: rgba(61, 61, 61, 0.63);
+
+$transition: all .2s ease-in-out;

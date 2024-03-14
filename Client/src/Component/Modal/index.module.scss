@@ -56,7 +56,7 @@
     
         &:hover {
           color: $grey-color;
-          transition: all 0.3s ease-in-out;
+          transition: $transition;
         }
       }
     }
@@ -73,6 +73,15 @@
       padding-right: 10px;
       margin-top: 2rem;
       margin-bottom: 1rem;
+
+      .cancelBtn {
+        margin-right: 1rem;
+        background-color: $grey-mid-color;
+
+        &:hover {
+          background-color: $grey-mid-hover-color;
+        }
+      }
     }
   }
 }

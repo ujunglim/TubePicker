@@ -10,6 +10,7 @@ import { folderManage } from "../../store/slices/folder";
 import CreateModal from "./CreateModal";
 import DeleteModal from "./DeleteModal";
 import EditModal from "./EditModal";
+import { FaPlus } from "react-icons/fa";
 
 export interface Sub {
   id: string;
@@ -76,7 +77,7 @@ const Folders = () => {
       <ToastContainer />
       <div style={{ display: "flex", flexFlow: "column" }}>
         <button onClick={() => showModal()} className={styles.createBtn}>
-          새 폴더 생성
+          <FaPlus className={styles.plusIcon} />새 폴더 생성
         </button>
         {folderList?.map(({ id, name, subList }) => (
           <FolderRow
