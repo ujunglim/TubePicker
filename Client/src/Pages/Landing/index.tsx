@@ -1,18 +1,8 @@
-import { useNavigate } from "react-router";
 import api from "../../api";
-import { useEffect } from "react";
 import styles from "./index.module.scss";
 import { FaGoogle } from "react-icons/fa";
 
 const Landing = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (localStorage.getItem("login") === "true") {
-      navigate("/home");
-    }
-  }, []);
-
   const handleLogin = async () => {
     const response = await api.post("/google/get_login_url");
     const { auth2Url } = response.data;
@@ -44,10 +34,10 @@ const Landing = () => {
         </section>
         <section>
           <span>Create folders to Group Channels by Interest</span>
-          <img src="/img/1.gif" alt="gif2" />
+          <img src="/img/2.gif" alt="gif2" />
         </section>
         <section>
-          <img src="/img/1.gif" alt="gif3" />
+          <img src="/img/3.gif" alt="gif3" />
           <span>Explore the Latest Videos from your Folders</span>
         </section>
       </div>

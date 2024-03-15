@@ -1,3 +1,4 @@
+import { useLocation } from "react-router";
 import Landing from "../Pages/Landing";
 import Header from "./Header";
 import SideBar from "./SideBar";
@@ -9,9 +10,13 @@ interface prop {
 }
 
 const AppLayout: FC<prop> = ({ children }) => {
+  const location = useLocation();
+
   return (
     <div className={styles.layout}>
-      {localStorage.getItem("login") === "true" ? (
+      {location.pathname === "/" ? (
+        <Landing />
+      ) : (
         <>
           <Header />
           <div className={styles.content}>
@@ -19,8 +24,6 @@ const AppLayout: FC<prop> = ({ children }) => {
             <main>{children}</main>
           </div>
         </>
-      ) : (
-        <Landing />
       )}
     </div>
   );
