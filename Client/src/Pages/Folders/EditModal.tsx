@@ -35,7 +35,6 @@ const EditModal: FC<Prop> = ({ info, allSubList, onClose }) => {
     setFolderName(info.name); // 기존 폴더이름
     setSelectedChannels(info.subList); // 기존 선택한 채널
     setChannelList(allSubList); // 구독하는 전체채널
-    console.log(allSubList, "++");
   }, [allSubList, info, info.name, info.subList]);
 
   const handleSearch = (e: any) => {

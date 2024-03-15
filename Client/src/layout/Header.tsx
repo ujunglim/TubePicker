@@ -35,6 +35,7 @@ const Header = () => {
   return (
     <header>
       <h1 className={styles.home_button} onClick={goToHome}>
+        <img src="/img/logo.png" alt="logo" />
         TubePicker
       </h1>
       {localStorage.getItem("login") === "true" && (

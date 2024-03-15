@@ -9,7 +9,7 @@ const googleRouter = express.Router();
 googleRouter.post("/get_login_url", (req, res) => {
   const gClient = new GoogleAuthClient();
   const auth2Url = gClient.getAuth2Url();
-  res.json({ auth2Url });
+  res.status(200).json({ auth2Url });
 });
 
 const generateToken = (email) => {
