@@ -89,7 +89,7 @@ googleRouter.get("/send_auth_code", async (req, res) => {
   // const env = process.env.NODE_ENV.trim();
   console.log(process.env.NODE_ENV, "====");
   res.redirect("https://ujung.link/home");
-  console.log(`========= Server is in [${env}] ==========`);
+  // console.log(`========= Server is in [${env}] ==========`);
   // switch (env) {
   //   case "dev":
   //     res.redirect("http://localhost:9090/home");

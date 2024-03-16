@@ -7,7 +7,8 @@ SCRIPT_PATH="app.js"
 # Check if the process is running
 if pm2 list | grep -q "$APP_NAME"; then
   echo "The process $APP_NAME is already running in PM2."
-  pm2 restart "$APP_NAME"
+  pm2 kill
+  NODE_ENV=pro pm2 start "$SCRIPT_PATH" --name "$APP_NAME" --max-restarts=1 -- pro
 else
   echo "The process $APP_NAME is not currently running in PM2."
   pm2 start "$SCRIPT_PATH" --name "$APP_NAME" --max-restarts=1 -- pro
