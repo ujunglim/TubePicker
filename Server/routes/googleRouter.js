@@ -86,16 +86,18 @@ googleRouter.get("/send_auth_code", async (req, res) => {
     console.log(`[ERROR] log in`);
   }
 
-  const env = process.env.NODE_ENV.trim();
+  // const env = process.env.NODE_ENV.trim();
+  console.log(process.env.NODE_ENV, "====");
+  res.redirect("https://ujung.link/home");
   console.log(`========= Server is in [${env}] ==========`);
-  switch (env) {
-    case "dev":
-      res.redirect("http://localhost:9090/home");
-      break;
-    case "pro":
-      res.redirect("https://ujung.link/home");
-      break;
-  }
+  // switch (env) {
+  //   case "dev":
+  //     res.redirect("http://localhost:9090/home");
+  //     break;
+  //   case "pro":
+  //     res.redirect("https://ujung.link/home");
+  //     break;
+  // }
 });
 
 export default googleRouter;
